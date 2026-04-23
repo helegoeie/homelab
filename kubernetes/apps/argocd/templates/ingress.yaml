@@ -6,15 +6,15 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    cert-manager.io/cluster-issuer: barrows-ca
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - argocd.barrows.home
+        - argocd.barrows.helegoeie.dev
       secretName: argocd-tls
   rules:
-    - host: argocd.barrows.home
+    - host: argocd.barrows.helegoeie.dev
       http:
         paths:
           - path: /
