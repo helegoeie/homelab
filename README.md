@@ -7,6 +7,7 @@ Homelab Kubernetes cluster built on Talos Linux, managed with ArgoCD.
 | Service    | URL                                      |
 |------------|------------------------------------------|
 | ArgoCD     | https://argocd.barrows.helegoeie.dev     |
+| Hubble UI  | https://hubble.barrows.helegoeie.dev     |
 
 Remote access via Tailscale — connect before accessing any service.
 
@@ -21,6 +22,7 @@ Remote access via Tailscale — connect before accessing any service.
 | Load balancer | MetalLB                                   |
 | Ingress       | ingress-nginx                             |
 | TLS           | cert-manager + Let's Encrypt (Cloudflare) |
+| Observability | Hubble UI (Cilium)                        |
 | Storage       | Longhorn + Backblaze B2                   |
 | Secrets       | Vault + External Secrets Operator         |
 | Monitoring    | Prometheus + Grafana                      |
