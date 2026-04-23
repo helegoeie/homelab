@@ -1,0 +1,31 @@
+app-template:
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: lscr.io/linuxserver/sonarr
+            tag: latest
+          env:
+            TZ: Europe/Amsterdam
+            PUID: "1000"
+            PGID: "1000"
+  service:
+    main:
+      controller: main
+      ports:
+        http:
+          port: 8989
+  persistence:
+    config:
+      existingClaim: sonarr-config
+      globalMounts:
+        - path: /config
+    media:
+      existingClaim: media-pvc
+      globalMounts:
+        - path: /media
+    downloads:
+      existingClaim: downloads-pvc
+      globalMounts:
+        - path: /downloads

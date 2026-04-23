@@ -1,0 +1,7 @@
+apiVersion: v2
+name: bazarr
+version: 0.0.1
+dependencies:
+  - name: app-template
+    repository: https://bjw-s.github.io/helm-charts
+    version: "*"

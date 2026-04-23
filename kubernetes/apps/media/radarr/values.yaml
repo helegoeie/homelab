@@ -1,0 +1,31 @@
+app-template:
+  controllers:
+    main:
+      containers:
+        main:
+          image:
+            repository: lscr.io/linuxserver/radarr
+            tag: latest
+          env:
+            TZ: Europe/Amsterdam
+            PUID: "1000"
+            PGID: "1000"
+  service:
+    main:
+      controller: main
+      ports:
+        http:
+          port: 7878
+  persistence:
+    config:
+      existingClaim: radarr-config
+      globalMounts:
+        - path: /config
+    media:
+      existingClaim: media-pvc
+      globalMounts:
+        - path: /media
+    downloads:
+      existingClaim: downloads-pvc
+      globalMounts:
+        - path: /downloads
