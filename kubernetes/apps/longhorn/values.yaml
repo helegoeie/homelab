@@ -1,3 +1,5 @@
 longhorn:
   defaultSettings:
     defaultReplicaCount: 2
+  preUpgradeChecker:
+    jobEnabled: false
