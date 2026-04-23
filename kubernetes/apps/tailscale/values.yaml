@@ -1,0 +1,13 @@
+tailscale-operator:
+  operatorConfig:
+    defaultTags:
+      - tag:k8s-operator
+  oauth:
+    # Populated from the manually created secret 'operator-oauth' in the tailscale namespace.
+    # Create the secret before first sync:
+    #   kubectl create secret generic operator-oauth \
+    #     --namespace tailscale \
+    #     --from-literal=client_id=<id> \
+    #     --from-literal=client_secret=<secret>
+    clientId: ""
+    clientSecret: ""
