@@ -4,7 +4,7 @@ app-template:
       containers:
         main:
           image:
-            repository: nabilak/solvearr
+            repository: ghcr.io/flaresolverr/flaresolverr
             tag: latest
           env:
             TZ: Europe/Amsterdam
