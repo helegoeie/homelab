@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: decluttarr-config
+  namespace: media
+data:
+  config.yaml: |
+    general:
+      log_level: INFO
+      test_run: false
+      timer: 10
+
+    instances:
+      radarr:
+        - base_url: !ENV RADARR_URL
+          api_key: !ENV RADARR_KEY
+      sonarr:
+        - base_url: !ENV SONARR_URL
+          api_key: !ENV SONARR_KEY
+
+    download_clients:
+      qbittorrent:
+        - base_url: !ENV QBITTORRENT_URL
+          name: qBittorrent
+          username: !ENV QBITTORRENT_USERNAME
+          password: !ENV QBITTORRENT_PASSWORD
