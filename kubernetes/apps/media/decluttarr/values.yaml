@@ -8,14 +8,12 @@ app-template:
             tag: latest
           env:
             TZ: Europe/Amsterdam
-            # Configure after Radarr/Sonarr/qBittorrent are running:
             RADARR_URL: http://radarr.media.svc.cluster.local:7878
-            RADARR_KEY: ""
             SONARR_URL: http://sonarr.media.svc.cluster.local:8989
-            SONARR_KEY: ""
             QBITTORRENT_URL: http://qbittorrent.media.svc.cluster.local:8080
-            QBITTORRENT_USERNAME: ""
-            QBITTORRENT_PASSWORD: ""
+          envFrom:
+            - secretRef:
+                name: decluttarr-credentials
   service:
     main:
       controller: main
