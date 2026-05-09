@@ -1,0 +1,7 @@
+apiVersion: v2
+name: zitadel
+version: 0.0.1
+dependencies:
+  - name: zitadel
+    repository: https://charts.zitadel.com
+    version: "*"

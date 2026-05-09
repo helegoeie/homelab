@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forgejo-runner
+  namespace: forgejo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forgejo-runner
+  template:
+    metadata:
+      labels:
+        app: forgejo-runner
+    spec:
+      initContainers:
+        - name: register
+          image: code.forgejo.org/forgejo/runner:latest
+          command:
+            - sh
+            - -c
+            - |
+              if [ ! -f /data/.runner ]; then
+                forgejo-runner register \
+                  --no-interactive \
+                  --instance http://forgejo-http.forgejo.svc.cluster.local:3000 \
+                  --token "$(FORGEJO_RUNNER_REGISTRATION_TOKEN)" \
+                  --name forgejo-runner \
+                  --labels ubuntu-latest:docker://node:lts-bookworm
+              fi
+          env:
+            - name: FORGEJO_RUNNER_REGISTRATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-runner-token
+                  key: token
+          volumeMounts:
+            - name: runner-data
+              mountPath: /data
+      containers:
+        - name: runner
+          image: code.forgejo.org/forgejo/runner:latest
+          command: ["forgejo-runner", "daemon"]
+          env:
+            - name: FORGEJO_INSTANCE_URL
+              value: http://forgejo-http.forgejo.svc.cluster.local:3000
+          volumeMounts:
+            - name: runner-data
+              mountPath: /data
+      volumes:
+        - name: runner-data
+          emptyDir: {}

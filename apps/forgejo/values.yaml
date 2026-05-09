@@ -1,0 +1,71 @@
+forgejo:
+  admin:
+    # Pre-create: kubectl create secret generic forgejo-admin-secret \
+    #   --from-literal=username='helegoeie' \
+    #   --from-literal=password='<strong-admin-password>' \
+    #   -n forgejo
+    existingSecret: forgejo-admin-secret
+
+  config:
+    database:
+      DB_TYPE: postgres
+      HOST: workout-pg-rw.workout.svc.cluster.local:5432
+      NAME: forgejo
+      USER: forgejo
+      # PASSWD injected via FORGEJO__database__PASSWD env var (see additionalConfigFromEnvs)
+    cache:
+      ADAPTER: redis
+      # HOST injected via FORGEJO__cache__HOST env var
+    queue:
+      TYPE: redis
+      # CONN injected via FORGEJO__queue__CONN env var
+    session:
+      PROVIDER: redis
+      # PROVIDER_CONFIG injected via FORGEJO__session__PROVIDER_CONFIG env var
+    server:
+      DOMAIN: forgejo.barrows.helegoeie.dev
+      ROOT_URL: https://forgejo.barrows.helegoeie.dev
+      HTTP_PORT: 3000
+
+  # Inject secrets into config at runtime.
+  # Pre-create: kubectl create secret generic forgejo-db-secret \
+  #   --from-literal=password='<forgejo-db-password>' \
+  #   -n forgejo
+  # Pre-create: kubectl create secret generic forgejo-redis-urls \
+  #   --from-literal=cache-url='redis://:PASSWORD@workout-redis-master.workout.svc.cluster.local:6379/0' \
+  #   --from-literal=queue-url='redis://:PASSWORD@workout-redis-master.workout.svc.cluster.local:6379/1' \
+  #   --from-literal=session-url='redis://:PASSWORD@workout-redis-master.workout.svc.cluster.local:6379/2' \
+  #   -n forgejo
+  additionalConfigFromEnvs:
+    - name: FORGEJO__database__PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-db-secret
+          key: password
+    - name: FORGEJO__cache__HOST
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-redis-urls
+          key: cache-url
+    - name: FORGEJO__queue__CONN
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-redis-urls
+          key: queue-url
+    - name: FORGEJO__session__PROVIDER_CONFIG
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-redis-urls
+          key: session-url
+
+  ingress:
+    enabled: false
+
+postgresql:
+  enabled: false
+
+postgresql-ha:
+  enabled: false
+
+redis-cluster:
+  enabled: false

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: powersync-config
+  namespace: powersync
+data:
+  powersync.yaml: |
+    replication:
+      connections:
+        - type: postgresql
+          uri: !env POSTGRESQL_URI
+
+    client_auth:
+      # jwks_uri points to Zitadel's JWKS endpoint
+      jwks_uri: https://zitadel.barrows.helegoeie.dev/oauth/v2/keys
+      # audience: fill in Zitadel client ID after Zitadel OIDC app is configured (Story 1.5)
+      audience: []
+
+    api:
+      parameters:
+        token_header: Authorization
+
+  sync_rules.yml: |
+    # Populated in Story 1.5 when PowerSync PoC is validated
+    bucket_definitions: {}

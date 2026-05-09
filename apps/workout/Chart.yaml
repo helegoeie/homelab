@@ -1,0 +1,7 @@
+apiVersion: v2
+name: workout
+version: 0.0.1
+dependencies:
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: "*"

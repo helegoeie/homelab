@@ -1,0 +1,18 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: workout-pg
+  namespace: workout
+spec:
+  instances: 1
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 10Gi
+    storageClass: longhorn-3replica
+  bootstrap:
+    initdb:
+      database: workout
+      owner: workout
+  postgresql:
+    pg_hba:
+      - host all all 0.0.0.0/0 scram-sha-256

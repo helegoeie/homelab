@@ -1,0 +1,38 @@
+zitadel:
+  # Pre-create: kubectl create secret generic zitadel-masterkey \
+  #   --from-literal=masterkey="$(openssl rand -base64 32 | head -c 32)" \
+  #   -n zitadel
+  masterkeySecretName: zitadel-masterkey
+
+  # Pre-create: kubectl create secret generic zitadel-db-credentials \
+  #   --from-literal=config.yaml="Database:
+  #     Postgres:
+  #       User:
+  #         Password: <zitadel-db-password>
+  #       Admin:
+  #         Password: <pg-superuser-password>" \
+  #   -n zitadel
+  existingSecret: zitadel-db-credentials
+
+  configmapConfig:
+    ExternalDomain: zitadel.barrows.helegoeie.dev
+    ExternalSecure: true
+    ExternalPort: 443
+    TLS:
+      Enabled: false
+    Database:
+      Postgres:
+        Host: workout-pg-rw.workout.svc.cluster.local
+        Port: 5432
+        Database: zitadel
+        MaxOpenConns: 20
+        MaxConnLifetime: 30m
+        MaxConnIdleTime: 5m
+        User:
+          Username: zitadel
+          SSL:
+            Mode: disable
+        Admin:
+          Username: postgres
+          SSL:
+            Mode: disable

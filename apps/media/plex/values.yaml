@@ -11,7 +11,6 @@ app-template:
             PUID: "1000"
             PGID: "1000"
             VERSION: docker
-            PLEX_CLAIM: "claim-qxpCvpH_6w-jehprCLU8"
           securityContext:
             privileged: true
   service:
