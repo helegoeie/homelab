@@ -23,7 +23,7 @@ spec:
               if [ ! -f /data/.runner ]; then
                 forgejo-runner register \
                   --no-interactive \
-                  --instance http://forgejo-http.forgejo.svc.cluster.local:3000 \
+                  --instance http://forgejo-gitea-http.forgejo.svc.cluster.local:3000 \
                   --token "$(FORGEJO_RUNNER_REGISTRATION_TOKEN)" \
                   --name forgejo-runner \
                   --labels ubuntu-latest:docker://node:lts-bookworm
@@ -43,7 +43,7 @@ spec:
           command: ["forgejo-runner", "daemon"]
           env:
             - name: FORGEJO_INSTANCE_URL
-              value: http://forgejo-http.forgejo.svc.cluster.local:3000
+              value: http://forgejo-gitea-http.forgejo.svc.cluster.local:3000
           volumeMounts:
             - name: runner-data
               mountPath: /data

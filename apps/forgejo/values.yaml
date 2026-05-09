@@ -1,4 +1,9 @@
-forgejo:
+gitea:
+  image:
+    repository: codeberg.org/forgejo/forgejo
+    tag: latest
+    rootless: false
+
   admin:
     # Pre-create: kubectl create secret generic forgejo-admin-secret \
     #   --from-literal=username='helegoeie' \
@@ -12,22 +17,22 @@ forgejo:
       HOST: workout-pg-rw.workout.svc.cluster.local:5432
       NAME: forgejo
       USER: forgejo
-      # PASSWD injected via FORGEJO__database__PASSWD env var (see additionalConfigFromEnvs)
+      # PASSWD injected via GITEA__database__PASSWD env var
     cache:
       ADAPTER: redis
-      # HOST injected via FORGEJO__cache__HOST env var
+      # HOST injected via GITEA__cache__HOST env var
     queue:
       TYPE: redis
-      # CONN injected via FORGEJO__queue__CONN env var
+      # CONN injected via GITEA__queue__CONN env var
     session:
       PROVIDER: redis
-      # PROVIDER_CONFIG injected via FORGEJO__session__PROVIDER_CONFIG env var
+      # PROVIDER_CONFIG injected via GITEA__session__PROVIDER_CONFIG env var
     server:
       DOMAIN: forgejo.barrows.helegoeie.dev
       ROOT_URL: https://forgejo.barrows.helegoeie.dev
       HTTP_PORT: 3000
 
-  # Inject secrets into config at runtime.
+  # Inject credentials at runtime via Kubernetes Secrets.
   # Pre-create: kubectl create secret generic forgejo-db-secret \
   #   --from-literal=password='<forgejo-db-password>' \
   #   -n forgejo
@@ -36,23 +41,23 @@ forgejo:
   #   --from-literal=queue-url='redis://:PASSWORD@workout-redis-master.workout.svc.cluster.local:6379/1' \
   #   --from-literal=session-url='redis://:PASSWORD@workout-redis-master.workout.svc.cluster.local:6379/2' \
   #   -n forgejo
-  additionalConfigFromEnvs:
-    - name: FORGEJO__database__PASSWD
+  extraEnvs:
+    - name: GITEA__database__PASSWD
       valueFrom:
         secretKeyRef:
           name: forgejo-db-secret
           key: password
-    - name: FORGEJO__cache__HOST
+    - name: GITEA__cache__HOST
       valueFrom:
         secretKeyRef:
           name: forgejo-redis-urls
           key: cache-url
-    - name: FORGEJO__queue__CONN
+    - name: GITEA__queue__CONN
       valueFrom:
         secretKeyRef:
           name: forgejo-redis-urls
           key: queue-url
-    - name: FORGEJO__session__PROVIDER_CONFIG
+    - name: GITEA__session__PROVIDER_CONFIG
       valueFrom:
         secretKeyRef:
           name: forgejo-redis-urls
@@ -61,11 +66,11 @@ forgejo:
   ingress:
     enabled: false
 
-postgresql:
-  enabled: false
+  postgresql:
+    enabled: false
 
-postgresql-ha:
-  enabled: false
+  postgresql-ha:
+    enabled: false
 
-redis-cluster:
-  enabled: false
+  redis-cluster:
+    enabled: false
