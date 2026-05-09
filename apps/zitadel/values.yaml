@@ -1,37 +1,16 @@
 zitadel:
   zitadel:
-    # Pre-create: kubectl create secret generic zitadel-masterkey \
-    #   --from-literal=masterkey="$(openssl rand -hex 16)" \
-    #   -n zitadel
     masterkeySecretName: zitadel-masterkey
 
-    # Pre-create: kubectl create secret generic zitadel-db-credentials \
-    #   --from-file=config.yaml=<(cat <<'EOSECRET'
-    # Database:
-    #   Postgres:
-    #     User:
-    #       Password: <zitadel-db-password>
-    #     Admin:
-    #       Password: <pg-superuser-password>
-    # EOSECRET
-    #   ) \
-    #   -n zitadel
-    existingSecret: zitadel-db-credentials
-
-    # Inject passwords as env vars (existingSecret config.yaml not mounted in init job)
-    # Pre-create: kubectl create secret generic zitadel-db-passwords
-    #   --from-literal=userPassword=<...> --from-literal=adminPassword=<...> -n zitadel
-    env:
-      - name: ZITADEL_DATABASE_POSTGRES_USER_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: zitadel-db-passwords
-            key: userPassword
-      - name: ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: zitadel-db-passwords
-            key: adminPassword
+    # secretConfig is rendered into a K8s Secret and mounted in BOTH the init job and
+    # main deployment — the only way to get passwords into the pre-install hook.
+    secretConfig:
+      Database:
+        Postgres:
+          User:
+            Password: "y25r7rJ0akKbWRjeFNVw7xpge45uOpVE"
+          Admin:
+            Password: "Mj7QBasQ361RawDMjUbKfC1hoiyZfi2JwsmZo8NT44cAJPIarZMglXLSMgKJ8jPH"
 
     configmapConfig:
       ExternalDomain: zitadel.barrows.helegoeie.dev

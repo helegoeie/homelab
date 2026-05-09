@@ -15,7 +15,7 @@ spec:
     spec:
       initContainers:
         - name: register
-          image: code.forgejo.org/forgejo/runner:latest
+          image: code.forgejo.org/forgejo/runner:6
           command:
             - sh
             - -c
@@ -39,7 +39,7 @@ spec:
               mountPath: /data
       containers:
         - name: runner
-          image: code.forgejo.org/forgejo/runner:latest
+          image: code.forgejo.org/forgejo/runner:6
           command: ["forgejo-runner", "daemon"]
           env:
             - name: FORGEJO_INSTANCE_URL

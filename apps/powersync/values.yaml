@@ -12,6 +12,11 @@ app-template:
                 secretKeyRef:
                   name: powersync-secret
                   key: postgresql-uri
+            # pgwire@0.8.1 always initiates SSL regardless of sslmode in URI.
+            # CloudNativePG uses a self-signed CA; disable Node.js TLS rejection
+            # for internal cluster traffic until proper cert mounting is added.
+            - name: NODE_TLS_REJECT_UNAUTHORIZED
+              value: "0"
   service:
     main:
       controller: main
