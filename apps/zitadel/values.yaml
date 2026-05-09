@@ -18,6 +18,21 @@ zitadel:
     #   -n zitadel
     existingSecret: zitadel-db-credentials
 
+    # Inject passwords as env vars (existingSecret config.yaml not mounted in init job)
+    # Pre-create: kubectl create secret generic zitadel-db-passwords
+    #   --from-literal=userPassword=<...> --from-literal=adminPassword=<...> -n zitadel
+    env:
+      - name: ZITADEL_DATABASE_POSTGRES_USER_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: zitadel-db-passwords
+            key: userPassword
+      - name: ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: zitadel-db-passwords
+            key: adminPassword
+
     configmapConfig:
       ExternalDomain: zitadel.barrows.helegoeie.dev
       ExternalSecure: true
