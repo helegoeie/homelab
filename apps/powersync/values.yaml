@@ -23,4 +23,5 @@ app-template:
       type: configMap
       name: powersync-config
       globalMounts:
-        - path: /home/powersync/config
+        - path: /app/powersync.yaml
+          subPath: powersync.yaml
