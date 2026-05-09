@@ -44,7 +44,7 @@ spec:
             - sh
             - -c
             - |
-              until docker info > /dev/null 2>&1; do sleep 2; done
+              until nc -z localhost 2375 2>/dev/null; do sleep 2; done
               exec forgejo-runner daemon
           env:
             - name: FORGEJO_INSTANCE_URL
