@@ -1,7 +1,8 @@
 gitea:
   image:
+    registry: ""
     repository: codeberg.org/forgejo/forgejo
-    tag: latest
+    tag: 11
     rootless: false
 
   admin:
