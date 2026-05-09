@@ -8,7 +8,7 @@ data:
     replication:
       connections:
         - type: postgresql
-          uri: !env POSTGRESQL_URI
+          uri: !env PS_POSTGRESQL_URI
 
     client_auth:
       # jwks_uri points to Zitadel's JWKS endpoint

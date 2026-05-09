@@ -7,7 +7,7 @@ app-template:
             repository: journeyapps/powersync-service
             tag: latest
           env:
-            - name: POSTGRESQL_URI
+            - name: PS_POSTGRESQL_URI
               valueFrom:
                 secretKeyRef:
                   name: powersync-secret
