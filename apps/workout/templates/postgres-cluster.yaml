@@ -8,7 +8,7 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: 10Gi
-    storageClass: longhorn-3replica
+    storageClass: longhorn
   bootstrap:
     initdb:
       database: workout
