@@ -1,5 +1,7 @@
 longhorn:
   defaultSettings:
     defaultReplicaCount: 2
+    storageMinimalAvailablePercentage: 10
+    storageReservedPercentageForDefaultDisk: 10
   preUpgradeChecker:
     jobEnabled: false
