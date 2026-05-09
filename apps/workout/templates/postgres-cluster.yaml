@@ -16,4 +16,4 @@ spec:
       owner: workout
   postgresql:
     pg_hba:
-      - host all all 0.0.0.0/0 scram-sha-256
+      - host all all 10.244.0.0/16 scram-sha-256

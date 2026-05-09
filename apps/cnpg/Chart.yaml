@@ -4,4 +4,4 @@ version: 0.0.1
 dependencies:
   - name: cloudnative-pg
     repository: https://cloudnative-pg.github.io/charts
-    version: "*"
+    version: "0.28.0"

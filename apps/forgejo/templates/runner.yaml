@@ -44,7 +44,7 @@ spec:
             - sh
             - -c
             - |
-              until nc -z localhost 2375 2>/dev/null; do sleep 2; done
+              WAIT=0; until nc -z localhost 2375 2>/dev/null; do sleep 2; WAIT=$((WAIT+2)); [ $WAIT -ge 120 ] && exit 1; done
               exec forgejo-runner daemon
           env:
             - name: FORGEJO_INSTANCE_URL
@@ -63,4 +63,5 @@ spec:
               value: ""
       volumes:
         - name: runner-data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: forgejo-runner-data

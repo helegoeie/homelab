@@ -1,4 +1,30 @@
 apiVersion: postgresql.cnpg.io/v1
+kind: Role
+metadata:
+  name: zitadel-role
+  namespace: workout
+spec:
+  name: zitadel
+  login: true
+  passwordSecret:
+    name: zitadel-pg-password
+  cluster:
+    name: workout-pg
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Role
+metadata:
+  name: forgejo-role
+  namespace: workout
+spec:
+  name: forgejo
+  login: true
+  passwordSecret:
+    name: forgejo-pg-password
+  cluster:
+    name: workout-pg
+---
+apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
   name: zitadel-db
