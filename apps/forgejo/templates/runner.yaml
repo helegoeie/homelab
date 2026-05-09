@@ -40,7 +40,12 @@ spec:
       containers:
         - name: runner
           image: code.forgejo.org/forgejo/runner:6
-          command: ["forgejo-runner", "daemon"]
+          command:
+            - sh
+            - -c
+            - |
+              until docker info > /dev/null 2>&1; do sleep 2; done
+              exec forgejo-runner daemon
           env:
             - name: FORGEJO_INSTANCE_URL
               value: http://forgejo-gitea-http.forgejo.svc.cluster.local:3000
