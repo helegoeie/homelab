@@ -5,16 +5,14 @@ gitea:
     tag: 11
     rootless: false
 
-  admin:
-    # Pre-create: kubectl create secret generic forgejo-admin-secret \
-    #   --from-literal=username='helegoeie' \
-    #   --from-literal=password='<strong-admin-password>' \
-    #   -n forgejo
-    existingSecret: forgejo-admin-secret
-
   gitea:
-    # gitea.gitea.config maps to .Values.gitea.config inside the gitea sub-chart,
-    # which is where the chart template reads app.ini settings from.
+    # gitea.gitea.admin/config maps to .Values.gitea.admin/config inside the gitea sub-chart.
+    admin:
+      # Pre-create: kubectl create secret generic forgejo-admin-secret \
+      #   --from-literal=username='helegoeie' \
+      #   --from-literal=password='<strong-admin-password>' \
+      #   -n forgejo
+      existingSecret: forgejo-admin-secret
     config:
       database:
         DB_TYPE: postgres
