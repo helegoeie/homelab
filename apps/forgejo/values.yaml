@@ -74,3 +74,6 @@ gitea:
 
   redis-cluster:
     enabled: false
+
+  valkey-cluster:
+    enabled: false
