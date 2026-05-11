@@ -28,8 +28,21 @@ data:
 
   sync_rules.yml: |
     bucket_definitions:
-      user_poc_entries:
+      global_exercises:
+        # Seeded exercises (is_custom = FALSE) are synced to every authenticated user.
+        # No user_id parameter needed — these are global read-only data.
+        data:
+          - SELECT id, name, muscle_group, secondary_muscle_groups, is_custom, user_id,
+                   created_at, updated_at
+            FROM exercises
+            WHERE is_custom = FALSE
+
+      user_exercises:
+        # Custom exercises (is_custom = TRUE) are scoped to their owning user only.
         parameters:
           - SELECT token_parameters.user_id as user_id
         data:
-          - SELECT id, content, user_id, created_at FROM poc_entries WHERE user_id = bucket.user_id
+          - SELECT id, name, muscle_group, secondary_muscle_groups, is_custom, user_id,
+                   created_at, updated_at
+            FROM exercises
+            WHERE is_custom = TRUE AND user_id = bucket.user_id
