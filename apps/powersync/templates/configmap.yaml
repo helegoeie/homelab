@@ -17,13 +17,19 @@ data:
     client_auth:
       # jwks_uri points to Zitadel's JWKS endpoint
       jwks_uri: https://zitadel.barrows.helegoeie.dev/oauth/v2/keys
-      # audience: fill in Zitadel client ID after Zitadel OIDC app is configured (Story 1.5)
-      audience: []
+      audience: ["372465282859402030"]
 
     api:
       parameters:
         token_header: Authorization
 
+    sync_rules:
+      path: /app/sync_rules.yml
+
   sync_rules.yml: |
-    # Populated in Story 1.5 when PowerSync PoC is validated
-    bucket_definitions: {}
+    bucket_definitions:
+      user_poc_entries:
+        parameters:
+          - SELECT token_parameters.user_id as user_id
+        data:
+          - SELECT id, content, user_id, created_at FROM poc_entries WHERE user_id = bucket.user_id

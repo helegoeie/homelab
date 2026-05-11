@@ -5,7 +5,7 @@ app-template:
         main:
           image:
             repository: journeyapps/powersync-service
-            tag: latest
+            tag: "1.20.5"
           env:
             - name: PS_POSTGRESQL_URI
               valueFrom:
@@ -30,3 +30,5 @@ app-template:
       globalMounts:
         - path: /app/powersync.yaml
           subPath: powersync.yaml
+        - path: /app/sync_rules.yml
+          subPath: sync_rules.yml
