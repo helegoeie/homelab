@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: forgejo.barrows.helegoeie.dev/helegoeie/workout-web
   pullPolicy: Always
-  tag: "latest"  # Updated automatically by Forgejo release workflow via update-homelab-tag job
+  tag: "v0.0.1-web-test"
 
 service:
   type: ClusterIP
