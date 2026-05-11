@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  repository: forgejo.barrows.helegoeie.dev/helegoeie/workout-web
+  pullPolicy: Always
+  tag: "latest"  # Updated automatically by Forgejo release workflow via update-homelab-tag job
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  host: app.barrows.helegoeie.dev
+  tls:
+    secretName: workout-web-tls
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
