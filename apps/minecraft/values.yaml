@@ -15,7 +15,7 @@ minecraft:
     dataDir:
       enabled: true
       storageClass: longhorn
-      Size: 50Gi
+      Size: 20Gi
 
   resources:
     requests:
