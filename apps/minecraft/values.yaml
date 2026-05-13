@@ -1,0 +1,26 @@
+minecraft:
+  minecraftServer:
+    eula: "TRUE"
+    type: "MODRINTH"
+    onlineMode: true
+    memory: "10G"
+    serviceType: LoadBalancer
+    loadBalancerIP: "192.168.1.242"
+
+  extraEnv:
+    MODRINTH_PROJECT: "all-the-mods-10"
+    MODRINTH_DEFAULT_VERSION_TYPE: "release"
+
+  persistence:
+    dataDir:
+      enabled: true
+      storageClass: longhorn
+      Size: 50Gi
+
+  resources:
+    requests:
+      memory: 10Gi
+      cpu: "2"
+    limits:
+      memory: 12Gi
+      cpu: "6"
