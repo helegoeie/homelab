@@ -1,15 +1,17 @@
 minecraft:
   minecraftServer:
     eula: "TRUE"
-    type: "MODRINTH"
+    type: "AUTO_CURSEFORGE"
     onlineMode: true
     memory: "10G"
     serviceType: LoadBalancer
     loadBalancerIP: "192.168.1.242"
-
-  extraEnv:
-    MODRINTH_PROJECT: "all-the-mods-10"
-    MODRINTH_DEFAULT_VERSION_TYPE: "release"
+    autoCurseForge:
+      apiKey:
+        existingSecret: "minecraft-curseforge"
+        secretKey: "apiKey"
+      slug: "all-the-mods-10"
+      fileId: "7892979"
 
   persistence:
     storageClass: longhorn-1replica
