@@ -14,7 +14,7 @@ minecraft:
   persistence:
     dataDir:
       enabled: true
-      storageClass: longhorn
+      storageClass: longhorn-1replica
       Size: 20Gi
 
   resources:
