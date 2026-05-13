@@ -12,9 +12,9 @@ minecraft:
     MODRINTH_DEFAULT_VERSION_TYPE: "release"
 
   persistence:
+    storageClass: longhorn-1replica
     dataDir:
       enabled: true
-      storageClass: longhorn-1replica
       Size: 20Gi
 
   resources:
