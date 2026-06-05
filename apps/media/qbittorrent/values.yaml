@@ -1,6 +1,21 @@
 app-template:
   controllers:
     main:
+      initContainers:
+        # qBittorrent uses Qt's QLockFile for single-instance detection. The
+        # lockfile records the pod hostname; QLockFile only reclaims a stale
+        # lock when the hostname matches. Every pod gets a new hostname, so a
+        # lockfile left by an unclean shutdown is never reclaimed and every new
+        # instance exits as a "secondary", crash-looping forever. Clear it (and
+        # the stale ipc-socket) before each start. See homelab memory.
+        clear-lock:
+          image:
+            repository: busybox
+            tag: "1.37"
+          command:
+            - sh
+            - -c
+            - rm -f /config/qBittorrent/lockfile /config/qBittorrent/ipc-socket
       containers:
         main:
           image:
