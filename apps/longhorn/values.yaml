@@ -1,7 +1,12 @@
 longhorn:
   defaultSettings:
-    defaultReplicaCount: 2
+    defaultReplicaCount: 1
     storageMinimalAvailablePercentage: 10
     storageReservedPercentageForDefaultDisk: 10
+  # Controls the replica count baked into the default `longhorn` StorageClass.
+  # Without this the chart hard-codes numberOfReplicas: "3", which overrides the
+  # defaultReplicaCount setting above for any PVC using the default class.
+  persistence:
+    defaultClassReplicaCount: 1
   preUpgradeChecker:
     jobEnabled: false
