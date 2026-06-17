@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  repository: forgejo.barrows.helegoeie.dev/helegoeie/log01
+  pullPolicy: Always
+  tag: "v0.0.1"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  host: log01.barrows.helegoeie.dev
+  tls:
+    secretName: log01-tls
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
