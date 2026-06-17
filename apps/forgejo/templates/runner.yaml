@@ -13,6 +13,12 @@ spec:
       labels:
         app: forgejo-runner
     spec:
+      securityContext:
+        # Runner image runs as uid 1000; without this the PVC at /data is
+        # root-owned and `forgejo-runner register` fails with
+        # "open .runner: permission denied", so no runner ever comes online
+        # ("no agent matching ubuntu-latest"). fsGroup makes /data group-writable.
+        fsGroup: 1000
       initContainers:
         - name: register
           image: code.forgejo.org/forgejo/runner:6
