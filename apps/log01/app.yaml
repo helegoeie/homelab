@@ -1,1 +1,6 @@
+# Pre-create the JWT signing secret (one-time, out of git):
+#   kubectl create namespace log01
+#   kubectl create secret generic log01-secrets \
+#     --from-literal=jwt-secret="$(openssl rand -hex 32)" \
+#     -n log01
 namespace: log01

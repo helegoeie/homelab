@@ -1,6 +1,6 @@
 apiVersion: v2
 name: log01
-description: Log01 workout tracker — static SPA served by nginx:alpine
+description: Log01 workout tracker — nginx SPA + node/sqlite sync API
 type: application
-version: 0.1.0
+version: 0.2.0
 appVersion: "1.0.0"

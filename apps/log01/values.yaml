@@ -1,9 +1,40 @@
+# Single-replica by design: the api uses a SQLite file on a RWO Longhorn volume.
 replicaCount: 1
 
-image:
-  repository: forgejo.barrows.helegoeie.dev/helegoeie/log01
-  pullPolicy: Always
-  tag: "v0.0.1"
+web:
+  image:
+    repository: forgejo.barrows.helegoeie.dev/helegoeie/log01
+    pullPolicy: Always
+    tag: "v0.2.0"
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+api:
+  image:
+    repository: forgejo.barrows.helegoeie.dev/helegoeie/log01-api
+    pullPolicy: Always
+    tag: "v0.2.0"
+  # JWT signing key — pre-create the secret (see app.yaml note).
+  auth:
+    existingSecret: log01-secrets
+    secretKey: jwt-secret
+  resources:
+    requests:
+      cpu: 10m
+      memory: 48Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+# Persistent SQLite store for the api (accounts + synced state).
+persistence:
+  storageClass: longhorn
+  size: 1Gi
 
 service:
   type: ClusterIP
@@ -15,11 +46,3 @@ ingress:
   host: log01.barrows.helegoeie.dev
   tls:
     secretName: log01-tls
-
-resources:
-  requests:
-    cpu: 10m
-    memory: 32Mi
-  limits:
-    cpu: 100m
-    memory: 64Mi
