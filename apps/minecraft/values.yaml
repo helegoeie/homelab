@@ -1,0 +1,22 @@
+minecraft:
+  minecraftServer:
+    eula: "TRUE"
+    type: "VANILLA"
+    onlineMode: true
+    memory: "4G"
+    serviceType: LoadBalancer
+    loadBalancerIP: "192.168.1.242"
+
+  persistence:
+    storageClass: longhorn-1replica
+    dataDir:
+      enabled: true
+      Size: 10Gi
+
+  resources:
+    requests:
+      memory: 4Gi
+      cpu: "1"
+    limits:
+      memory: 5Gi
+      cpu: "4"
