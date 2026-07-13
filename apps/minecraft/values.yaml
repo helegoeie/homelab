@@ -7,6 +7,10 @@ minecraft:
     memory: "4G"
     serviceType: LoadBalancer
     loadBalancerIP: "192.168.1.242"
+    whitelist: "Helegoeie,brunwurker,creeperpower_hr,Fryslanboppe666"
+
+  extraEnv:
+    ENABLE_WHITELIST: "true"
 
   persistence:
     storageClass: longhorn-1replica
