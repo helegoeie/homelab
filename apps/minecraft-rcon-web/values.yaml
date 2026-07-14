@@ -12,6 +12,10 @@ rcon-web-admin:
     passwordKey: password
     username: admin
     isAdmin: true
+    # Browser-facing websocket for the live console. Defaults to
+    # ws://localhost:4327 which only works when browser == server.
+    websocketUrl: "ws://192.168.1.243:4327"
+    websocketUrlSsl: "wss://192.168.1.243:4327"
 
   # LAN-only LoadBalancer (MetalLB), same pattern as the minecraft service itself.
   # Reachable on the local network and via the Tailscale subnet router
