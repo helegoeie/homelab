@@ -13,9 +13,11 @@ rcon-web-admin:
     username: admin
     isAdmin: true
 
-  # Exposed only over Tailscale, via our own ingress in templates/ingress.yaml
-  ingress:
-    enabled: false
+  # LAN-only LoadBalancer (MetalLB), same pattern as the minecraft service itself.
+  # Reachable on the local network and via the Tailscale subnet router
+  # (advertises 192.168.1.0/24) but not exposed to the public internet.
+  service:
+    type: LoadBalancer
 
   resources:
     requests:
