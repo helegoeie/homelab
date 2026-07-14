@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minecraft-rcon-web
+  namespace: minecraft
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: minecraft-rcon-web
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - mc-admin

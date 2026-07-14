@@ -1,0 +1,7 @@
+apiVersion: v2
+name: minecraft-rcon-web
+version: 0.1.0
+dependencies:
+  - name: rcon-web-admin
+    repository: https://itzg.github.io/minecraft-server-charts/
+    version: "1.2.1"

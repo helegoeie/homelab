@@ -1,0 +1,26 @@
+rcon-web-admin:
+  fullnameOverride: minecraft-rcon-web
+
+  rconWeb:
+    game: minecraft
+    serverName: minecraft
+    rconHost: minecraft-rcon
+    rconPort: 25575
+    rconPasswordExistingSecret: minecraft-rcon-secret
+    rconPasswordKey: rcon-password
+    passwordExistingSecret: minecraft-rcon-secret
+    passwordKey: password
+    username: admin
+    isAdmin: true
+
+  # Exposed only over Tailscale, via our own ingress in templates/ingress.yaml
+  ingress:
+    enabled: false
+
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: "50m"
+    limits:
+      memory: 256Mi
+      cpu: "500m"

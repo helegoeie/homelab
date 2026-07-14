@@ -1,0 +1,6 @@
+dependencies:
+- name: rcon-web-admin
+  repository: https://itzg.github.io/minecraft-server-charts/
+  version: 1.2.1
+digest: sha256:7a40376421bf36864b6dd715d46b93155edb187eb3098641de701387eadc7380
+generated: "2026-07-14T10:25:14.339694878+02:00"
