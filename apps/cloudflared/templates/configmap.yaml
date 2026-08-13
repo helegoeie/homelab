@@ -1,0 +1,25 @@
+{{- if not .Values.tunnel.id }}
+{{- fail "tunnel.id is empty — set it to the UUID from `cloudflared tunnel create barrows`" }}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "cloudflared.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cloudflared.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    tunnel: {{ .Values.tunnel.id }}
+    credentials-file: /etc/cloudflared/creds/credentials.json
+    metrics: 0.0.0.0:2000
+    # The image is pinned in values.yaml and rolled via git, not self-updated.
+    no-autoupdate: true
+    ingress:
+    {{- range .Values.ingress }}
+      - hostname: {{ .hostname }}
+        service: {{ .service }}
+    {{- end }}
+      # Required catch-all: anything not matched above is refused at the tunnel,
+      # so a stray DNS record can never expose an unlisted service.
+      - service: http_status:404

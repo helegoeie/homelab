@@ -1,0 +1,6 @@
+apiVersion: v2
+name: cloudflared
+description: Cloudflare Tunnel — public ingress for selected homelab apps
+type: application
+version: 0.1.0
+appVersion: "2026.8.0"

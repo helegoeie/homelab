@@ -1,0 +1,10 @@
+# Pre-create the tunnel credentials secret (one-time, out of git):
+#   cloudflared tunnel login
+#   cloudflared tunnel create barrows
+#   kubectl create namespace cloudflared
+#   kubectl create secret generic cloudflared-credentials \
+#     --from-file=credentials.json="$HOME/.cloudflared/<TUNNEL-ID>.json" \
+#     -n cloudflared
+#
+# Then set tunnel.id in values.yaml to that same <TUNNEL-ID>.
+namespace: cloudflared
