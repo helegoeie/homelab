@@ -19,16 +19,16 @@ gitea:
         HOST: workout-pg-rw.workout.svc.cluster.local:5432
         NAME: forgejo
         USER: forgejo
-        PASSWD: "I7i5zOxA1jCwhs8cAxKmiYoz5iALCFVd"
+        PASSWD: "Rtljpo2NJMqDkOS9AVaG0KmlSLxCNST"
       cache:
         ADAPTER: redis
-        HOST: "redis://:yDieWHIULQSadPLin9wZ6YLwRyZUVDuP@workout-redis-master.workout.svc.cluster.local:6379/0"
+        HOST: "redis://:IbdcJemCwrljUddyp5FRJjaf7VWOsH3I@workout-redis-master.workout.svc.cluster.local:6379/0"
       queue:
         TYPE: redis
-        CONN_STR: "redis://:yDieWHIULQSadPLin9wZ6YLwRyZUVDuP@workout-redis-master.workout.svc.cluster.local:6379/1"
+        CONN_STR: "redis://:IbdcJemCwrljUddyp5FRJjaf7VWOsH3I@workout-redis-master.workout.svc.cluster.local:6379/1"
       session:
         PROVIDER: redis
-        PROVIDER_CONFIG: "redis://:yDieWHIULQSadPLin9wZ6YLwRyZUVDuP@workout-redis-master.workout.svc.cluster.local:6379/2"
+        PROVIDER_CONFIG: "redis://:IbdcJemCwrljUddyp5FRJjaf7VWOsH3I@workout-redis-master.workout.svc.cluster.local:6379/2"
       server:
         DOMAIN: forgejo.barrows.helegoeie.dev
         ROOT_URL: https://forgejo.barrows.helegoeie.dev
