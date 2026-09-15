@@ -7,6 +7,8 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     cert-manager.io/cluster-issuer: letsencrypt
+    # Container registry blob uploads (docker push) can exceed nginx's 1m default body size.
+    nginx.ingress.kubernetes.io/proxy-body-size: "512m"
 spec:
   ingressClassName: nginx
   tls:
