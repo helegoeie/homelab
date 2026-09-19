@@ -12,7 +12,6 @@
     "docker:pinDigests"
   ],
   "timezone": "Europe/Amsterdam",
-  "schedule": ["before 6am on monday"],
   "labels": ["dependencies"],
   "prConcurrentLimit": 5,
   "ignorePaths": ["apps/log01/**"],
