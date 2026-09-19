@@ -1,0 +1,34 @@
+# Self-hosted Renovate run: scans this repo (Helm charts, container images,
+# GitHub Actions) and opens PRs for available updates.
+#
+# Required repo secret (Settings → Secrets and variables → Actions):
+#   RENOVATE_TOKEN – a GitHub PAT (fine-grained: Contents R/W, Pull requests
+#                    R/W on this repo) or a GitHub App token. A classic PAT
+#                    with "repo" scope also works.
+#
+# Runs on a schedule and can be triggered manually from the Actions tab.
+
+name: renovate
+
+on:
+  schedule:
+    - cron: "0 5 * * 1" # every Monday at 05:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Self-hosted Renovate
+        uses: renovatebot/github-action@v40
+        with:
+          configurationFile: renovate.json
+          token: "${{ secrets.RENOVATE_TOKEN }}"
+        env:
+          LOG_LEVEL: info

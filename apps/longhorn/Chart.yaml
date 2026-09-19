@@ -4,4 +4,4 @@ version: 0.0.1
 dependencies:
   - name: longhorn
     repository: https://charts.longhorn.io
-    version: "*"
+    version: "1.12.1"

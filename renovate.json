@@ -1,0 +1,46 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    ":disableDependencyDashboard",
+    "docker:pinDigests"
+  ],
+  "timezone": "Europe/Amsterdam",
+  "schedule": ["before 6am on monday"],
+  "labels": ["dependencies"],
+  "prConcurrentLimit": 5,
+  "helmv3": {
+    "fileMatch": ["(^|/)apps/.+/Chart\\.ya?ml$"]
+  },
+  "helm-values": {
+    "fileMatch": ["(^|/)apps/.+/values\\.ya?ml$"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["helmv3"],
+      "matchPackageNames": ["cert-manager"],
+      "versioning": "semver-coerced"
+    },
+    {
+      "matchManagers": ["helmv3"],
+      "groupName": "helm charts (minor/patch)",
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "matchManagers": ["helmv3"],
+      "matchUpdateTypes": ["major"],
+      "labels": ["dependencies", "major"]
+    },
+    {
+      "matchManagers": ["helm-values"],
+      "matchDatasources": ["docker"],
+      "groupName": "container images",
+      "labels": ["dependencies", "container-image"]
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions"
+    }
+  ]
+}
