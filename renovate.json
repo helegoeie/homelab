@@ -1,5 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "platform": "github",
+  "repositories": ["helegoeie/homelab"],
+  "onboarding": false,
+  "requireConfig": "optional",
+  "gitAuthor": "Renovate Bot <renovate@helegoeie.dev>",
   "extends": [
     "config:recommended",
     ":semanticCommits",
