@@ -14,6 +14,7 @@
   "timezone": "Europe/Amsterdam",
   "labels": ["dependencies"],
   "prConcurrentLimit": 5,
+  "prHourlyLimit": 10,
   "ignorePaths": ["apps/log01/**"],
   "helmv3": {
     "fileMatch": ["(^|/)apps/.+/Chart\\.ya?ml$"]
