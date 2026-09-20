@@ -5,7 +5,7 @@ app-template:
         main:
           image:
             repository: ghcr.io/manimatter/decluttarr
-            tag: latest
+            tag: latest@sha256:c06d48426b612b845f2406c2d045f266468a6390faf87aea796d497a2935ec95
           env:
             TZ: Europe/Amsterdam
             RADARR_URL: http://radarr.media.svc.cluster.local:7878

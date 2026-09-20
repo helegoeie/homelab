@@ -5,7 +5,7 @@ app-template:
         main:
           image:
             repository: ghcr.io/flaresolverr/flaresolverr
-            tag: latest
+            tag: latest@sha256:c80ae007ce2ccdcd217a12426e4f039ef763ff90738c808d38810c3e59323767
           env:
             TZ: Europe/Amsterdam
   service:
