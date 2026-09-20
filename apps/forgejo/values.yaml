@@ -2,7 +2,7 @@ gitea:
   image:
     registry: ""
     repository: codeberg.org/forgejo/forgejo
-    tag: 11@sha256:946243edbab116d5bb78b73ea68af6f3d69229ba1b1ed958dd82c3481167f3e0
+    tag: 16@sha256:cf5f5ae6acf2ababca0ee3d255705b83a47f35b25e07fc931d694d60664053fe
     rootless: false
 
   gitea:
