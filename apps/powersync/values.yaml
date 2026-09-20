@@ -5,7 +5,7 @@ app-template:
         main:
           image:
             repository: journeyapps/powersync-service
-            tag: "1.20.5"
+            tag: "1.26.1@sha256:413a0c813e96935ebe7203b5759f8a594a7b7cd8aa42134713e63af637e0f079"
           env:
             - name: PS_POSTGRESQL_URI
               valueFrom:
