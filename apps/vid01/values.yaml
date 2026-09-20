@@ -5,7 +5,7 @@ web:
   image:
     repository: forgejo.barrows.helegoeie.dev/helegoeie/vid01
     pullPolicy: Always
-    tag: "latest"
+    tag: "9dd3793"
   resources:
     requests:
       cpu: 10m
@@ -18,7 +18,7 @@ api:
   image:
     repository: forgejo.barrows.helegoeie.dev/helegoeie/vid01-api
     pullPolicy: Always
-    tag: "latest"
+    tag: "9dd3793"
   # Comma-separated channel URLs/@handles/IDs seeded on first boot only.
   # Manage channels afterwards from the app's settings UI.
   seedChannels: "UCizpFyPoDNfbqJ1hBHnng-g"
