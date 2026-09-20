@@ -8,7 +8,7 @@ app-template:
         main:
           image:
             repository: seerr/seerr
-            tag: latest
+            tag: latest@sha256:f4768de5f616248d723e05891f3345a1402123775d03bf0890dbfedc0831bda1
           env:
             TZ: Europe/Amsterdam
   service:
