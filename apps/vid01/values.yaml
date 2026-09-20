@@ -23,6 +23,10 @@ api:
   # Manage channels afterwards from the app's settings UI.
   seedChannels: "UCizpFyPoDNfbqJ1hBHnng-g"
   pollIntervalMs: "900000"
+  # In-cluster Ollama service deployed by ../ollama — used for the
+  # "Summarize with AI" feature (transcript.js + summarizer.js).
+  ollamaUrl: "http://ollama.ollama.svc.cluster.local:11434"
+  ollamaModel: "llama3.2:3b"
   resources:
     requests:
       cpu: 10m

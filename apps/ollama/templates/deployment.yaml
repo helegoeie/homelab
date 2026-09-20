@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ollama.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ollama.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "ollama.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ollama.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: ollama
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: api
+              containerPort: 11434
+              protocol: TCP
+          lifecycle:
+            postStart:
+              exec:
+                # Pulls the model on first boot; cached on the PVC afterwards
+                # so subsequent restarts start serving immediately. Runs in
+                # the background — the pod is ready before this completes,
+                # and requests just wait/fail until the model is present.
+                command:
+                  - /bin/sh
+                  - -c
+                  - "nohup ollama pull {{ .Values.model }} >/proc/1/fd/1 2>/proc/1/fd/2 &"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: api
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: api
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /root/.ollama
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "ollama.fullname" . }}-data

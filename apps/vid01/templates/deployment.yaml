@@ -57,6 +57,10 @@ spec:
               value: {{ .Values.api.seedChannels | quote }}
             - name: POLL_INTERVAL_MS
               value: {{ .Values.api.pollIntervalMs | quote }}
+            - name: OLLAMA_URL
+              value: {{ .Values.api.ollamaUrl | quote }}
+            - name: OLLAMA_MODEL
+              value: {{ .Values.api.ollamaModel | quote }}
           ports:
             - name: api
               containerPort: 4000

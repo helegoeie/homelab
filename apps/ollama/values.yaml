@@ -1,0 +1,33 @@
+# Single replica by design: CPU-only inference on 16GB nodes, and the model
+# cache lives on a RWO Longhorn volume anyway.
+replicaCount: 1
+
+image:
+  repository: ollama/ollama
+  tag: "0.3.14"
+  pullPolicy: IfNotPresent
+
+# Pulled once via a postStart hook and cached on the persistent volume, so
+# restarts don't re-download the model. Keep this small — these are CPU-only
+# 16GB nodes with other workloads (Plex, *arr stack, etc.) sharing capacity.
+model: "llama3.2:3b"
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: "4"
+    memory: 6Gi
+
+# Model cache (~2GB for llama3.2:3b, quantized).
+persistence:
+  storageClass: longhorn
+  size: 10Gi
+
+service:
+  type: ClusterIP
+  port: 11434
+
+# No Ingress: this is only ever called from inside the cluster (vid01's api),
+# never exposed internally or publicly.

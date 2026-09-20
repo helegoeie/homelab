@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ollama
+description: Local Ollama LLM server (CPU-only) — used in-cluster by vid01's video summarization feature
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
