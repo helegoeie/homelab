@@ -1,0 +1,48 @@
+# Single-replica by design: the api uses a SQLite file on a RWO Longhorn volume.
+replicaCount: 1
+
+web:
+  image:
+    repository: forgejo.barrows.helegoeie.dev/helegoeie/vid01
+    pullPolicy: Always
+    tag: "latest"
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+api:
+  image:
+    repository: forgejo.barrows.helegoeie.dev/helegoeie/vid01-api
+    pullPolicy: Always
+    tag: "latest"
+  # Comma-separated channel URLs/@handles/IDs seeded on first boot only.
+  # Manage channels afterwards from the app's settings UI.
+  seedChannels: "UCizpFyPoDNfbqJ1hBHnng-g"
+  pollIntervalMs: "900000"
+  resources:
+    requests:
+      cpu: 10m
+      memory: 48Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+# Persistent SQLite store for the api (channels + discovered videos).
+persistence:
+  storageClass: longhorn
+  size: 1Gi
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  host: vid01.barrows.helegoeie.dev
+  tls:
+    secretName: vid01-tls

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: vid01
+description: Vid01 — algorithm-free YouTube RSS feed viewer (nginx SPA + node/sqlite api)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
