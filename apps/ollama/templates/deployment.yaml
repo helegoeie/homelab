@@ -25,6 +25,11 @@ spec:
             - name: api
               containerPort: 11434
               protocol: TCP
+          env:
+            - name: OLLAMA_KEEP_ALIVE
+              value: {{ .Values.env.keepAlive | quote }}
+            - name: OLLAMA_LOAD_TIMEOUT
+              value: {{ .Values.env.loadTimeout | quote }}
           lifecycle:
             postStart:
               exec:

@@ -1,17 +1,4 @@
 apiVersion: postgresql.cnpg.io/v1
-kind: Role
-metadata:
-  name: forgejo-role
-  namespace: workout
-spec:
-  name: forgejo
-  login: true
-  passwordSecret:
-    name: forgejo-pg-password
-  cluster:
-    name: workout-pg
----
-apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
   name: forgejo-db
@@ -22,8 +9,12 @@ spec:
   cluster:
     name: workout-pg
 
-# NOTE: zitadel-role / zitadel-db were removed here after the workout-pg cluster was
-# recreated from scratch (its prior data — including Zitadel's — was unrecoverable, no
+# NOTE: the "forgejo" role itself is declared via managed.roles on the Cluster
+# (postgres-cluster.yaml) -- this CNPG version (1.29.0) has no standalone Role CRD.
+#
+# zitadel-db (and its role) were removed here after the workout-pg cluster was
+# recreated from scratch (its prior data -- including Zitadel's -- was unrecoverable, no
 # backup target existed). Restoring Zitadel's connection requires a separate, deliberate
-# pass: recreate its role/database here, generate a new zitadel-pg-password secret, and
-# update apps/zitadel/values.yaml's Postgres Admin/User passwords + rerun its init job.
+# pass: add its role to managed.roles + a Database CR here, generate a new
+# zitadel-pg-password secret, and update apps/zitadel/values.yaml's Postgres Admin/User
+# passwords + rerun its init job.

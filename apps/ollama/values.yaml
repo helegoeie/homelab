@@ -25,6 +25,16 @@ persistence:
   storageClass: longhorn
   size: 10Gi
 
+# Ollama's default keep_alive (5m idle) unloads the model between requests,
+# and OLLAMA_LOAD_TIMEOUT (also 5m default) bounds the *combined* reload+
+# generate time for the next request. On this CPU-only hardware, a cold
+# reload (~20s) plus generation for a long transcript can exceed 5 minutes
+# and gets killed with a 500. Keep the model resident much longer and give
+# cold-start requests a lot more headroom.
+env:
+  keepAlive: "60m"
+  loadTimeout: "30m"
+
 service:
   type: ClusterIP
   port: 11434

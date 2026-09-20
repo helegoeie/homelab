@@ -21,3 +21,10 @@ spec:
   postgresql:
     pg_hba:
       - host all all 10.244.0.0/16 scram-sha-256
+  managed:
+    roles:
+      - name: forgejo
+        ensure: present
+        login: true
+        passwordSecret:
+          name: forgejo-pg-password
