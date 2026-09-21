@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: ollama/ollama
-  tag: "0.3.14"
+  tag: "0.34.2@sha256:da6e0dc5651df159e45686fd663c4dbe1624a52c44d7280eeac1551d8f865532"
   pullPolicy: IfNotPresent
 
 # Pulled once via a postStart hook and cached on the persistent volume, so
