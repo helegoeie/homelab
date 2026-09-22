@@ -4,4 +4,4 @@ version: 0.0.1
 dependencies:
   - name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: "28.2.1"
+    version: "28.2.3"
