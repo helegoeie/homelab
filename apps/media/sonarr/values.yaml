@@ -5,7 +5,7 @@ app-template:
         main:
           image:
             repository: lscr.io/linuxserver/sonarr
-            tag: latest@sha256:a5c1a5fecbef946927ab90ad68df319ac5fe644057e5fc18cd993f01ac07b2b2
+            tag: latest@sha256:386c962ee6e260e3a5656b25df2ed056bcc9b6410e197d075f9547fd14c23bca
           env:
             TZ: Europe/Amsterdam
             PUID: "1000"
