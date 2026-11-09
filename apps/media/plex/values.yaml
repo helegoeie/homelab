@@ -5,7 +5,7 @@ app-template:
         main:
           image:
             repository: lscr.io/linuxserver/plex
-            tag: latest@sha256:1f6f97d76e7bdb013789e94c838f2d9133b01ee4b2d4194148e492c4e4f12d90
+            tag: latest@sha256:0c2f1122a4275efeea953a9882359f3809b27279d3c3022392e8e610a2eccc67
           env:
             TZ: Europe/Amsterdam
             PUID: "1000"

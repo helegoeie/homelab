@@ -5,7 +5,7 @@ app-template:
         main:
           image:
             repository: lscr.io/linuxserver/prowlarr
-            tag: latest@sha256:c96b56d94d116a9f4de94bc23d3381689492e6c3cfb7435320e8d982e406f99a
+            tag: latest@sha256:431d7efebcef466e56adaa40a7a2fa2b0e85159a037b8bf465eaadbf0cf5bedf
           env:
             TZ: Europe/Amsterdam
             PUID: "1000"
