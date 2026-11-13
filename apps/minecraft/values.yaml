@@ -8,6 +8,8 @@ minecraft:
     serviceType: LoadBalancer
     loadBalancerIP: "192.168.1.242"
     whitelist: "Helegoeie,brunwurker,creeperpower_hr,Fryslanboppe666"
+    # New world started 2026-11-13; previous world kept on the volume as "world"
+    worldSaveName: "world-2026-11"
 
     rcon:
       enabled: true
