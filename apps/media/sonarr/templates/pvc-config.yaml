@@ -3,6 +3,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: sonarr-config
   namespace: media
+  labels:
+    # Excluded from the nightly R2 backup (config is rebuildable).
+    recurring-job-source.longhorn.io: enabled
+    recurring-job-group.longhorn.io/no-backup: enabled
 spec:
   storageClassName: longhorn
   accessModes:
