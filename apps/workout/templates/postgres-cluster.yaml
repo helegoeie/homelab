@@ -21,6 +21,7 @@ spec:
       owner: workout
   plugins:
     - name: barman-cloud.cloudnative-pg.io
+      enabled: true
       isWALArchiver: true
       parameters:
         barmanObjectName: r2-store
@@ -32,5 +33,9 @@ spec:
       - name: forgejo
         ensure: present
         login: true
+        # CNPG fills in these defaults; ArgoCD compares list items whole, so
+        # leaving them out kept the Cluster permanently OutOfSync.
+        connectionLimit: -1
+        inherit: true
         passwordSecret:
           name: forgejo-pg-password
