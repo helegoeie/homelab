@@ -1,0 +1,56 @@
+# RCON is a full server console behind one shared password. Only the rcon web
+# admin needs it, so nothing else in the cluster may reach port 25575.
+# The game port (25565) and the rcon web admin (80, 4327) stay open to every
+# source: they are LAN/Tailscale LoadBalancer services. Egress is left open.
+# Kubelet probes come from the node and are always allowed by Cilium.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: minecraft
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-minecraft
+  namespace: minecraft
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: minecraft
+      app.kubernetes.io/name: minecraft
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - port: 25565
+          protocol: TCP
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: minecraft-rcon-web
+      ports:
+        - port: 25575
+          protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-rcon-web
+  namespace: minecraft
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: minecraft-rcon-web
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - port: 4326
+          protocol: TCP
+        - port: 4327
+          protocol: TCP
