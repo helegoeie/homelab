@@ -1,5 +1,7 @@
 longhorn:
   defaultSettings:
+    # Detached volumes (the second Minecraft world) are attached for the nightly backup.
+    allowRecurringJobWhileVolumeDetached: true
     defaultReplicaCount: 1
     storageMinimalAvailablePercentage: 10
     storageReservedPercentageForDefaultDisk: 10
