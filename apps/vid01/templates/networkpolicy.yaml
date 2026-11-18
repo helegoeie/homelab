@@ -1,0 +1,20 @@
+# Only ingress-nginx talks to vid01 (web on 80; the api sidecar is reached over
+# localhost inside the pod). Egress is left open (YouTube RSS, Ollama).
+# Kubelet probes come from the node and are always allowed by Cilium.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-nginx-only
+  namespace: {{ .Release.Namespace }}
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - port: 80
+          protocol: TCP
