@@ -1,0 +1,64 @@
+# Ingress lockdown for the shared Postgres + Redis (see postgres-cluster.yaml).
+# Only Forgejo is a client today; add a namespace here when another app gets a
+# database or cache in this cluster. Egress is left open.
+# Kubelet probes come from the node and are always allowed by Cilium.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: workout
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-postgres
+  namespace: workout
+spec:
+  podSelector:
+    matchLabels:
+      cnpg.io/cluster: workout-pg
+  policyTypes:
+    - Ingress
+  ingress:
+    # Database clients, plus the instances themselves (replication if instances > 1).
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: forgejo
+        - podSelector: {}
+      ports:
+        - port: 5432
+          protocol: TCP
+    # The CNPG operator drives each instance through its status/management API.
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: cnpg-system
+      ports:
+        - port: 8000
+          protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-redis
+  namespace: workout
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: workout
+      app.kubernetes.io/name: redis
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: forgejo
+      ports:
+        - port: 6379
+          protocol: TCP

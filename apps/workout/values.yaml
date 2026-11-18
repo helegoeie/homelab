@@ -5,6 +5,10 @@ redis:
   # ("Can't handle RDB format version 15"), crash-looping Redis after a reschedule.
   image:
     digest: sha256:59078af5aec997137eb95f34fed376487b471e05c9a244c2812a13598c434950
+  # The chart's own policy allows 6379 from every pod in the cluster;
+  # templates/networkpolicy.yaml limits it to Forgejo instead.
+  networkPolicy:
+    enabled: false
   auth:
     enabled: true
     existingSecret: redis-secret
