@@ -1,0 +1,42 @@
+# Ingress lockdown for Forgejo. Egress is left open.
+#
+# The runner's dind sidecar serves an unauthenticated Docker API on
+# tcp://0.0.0.0:2375 of the pod IP (DOCKER_TLS_CERTDIR=""). Without a policy any
+# pod in the cluster could start a privileged container through it and own the
+# node. Nothing needs to connect to the runner, so it gets no ingress at all.
+# Kubelet probes come from the node and are always allowed by Cilium.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: forgejo
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+# Web UI, API and container registry via ingress-nginx; the runner (and the job
+# containers it starts inside dind) from this namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-forgejo
+  namespace: forgejo
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: forgejo
+      app.kubernetes.io/name: gitea
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+        - podSelector: {}
+      ports:
+        - port: 3000
+          protocol: TCP
+        - port: 2222
+          protocol: TCP
