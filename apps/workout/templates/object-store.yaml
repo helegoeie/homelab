@@ -9,7 +9,7 @@ metadata:
     # CRD comes from the cnpg app (plugin-barman-cloud); let sync retry until it exists.
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  retentionPolicy: "14d"
+  retentionPolicy: "7d"
   configuration:
     destinationPath: s3://barrows-backup/cnpg/
     endpointURL: https://245a73116c580f0e6c708784c197034a.r2.cloudflarestorage.com
