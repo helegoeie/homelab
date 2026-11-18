@@ -1,0 +1,39 @@
+# Ingress lockdown for the whole media namespace (this app owns the namespace).
+# The *arr apps, qBittorrent, Solvearr, Seerr and Plex talk to each other inside
+# the namespace; their UIs are reached through ingress-nginx. Plex is also a
+# LAN/Tailscale LoadBalancer, so its port stays open to every source.
+# Pods from other namespaces can no longer reach the *arr APIs or qBittorrent.
+# Egress is left open. Kubelet probes come from the node and are always allowed
+# by Cilium.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-namespace-and-ingress-nginx
+  namespace: media
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector: {}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-plex-lan
+  namespace: media
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: plex
+      app.kubernetes.io/name: plex
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - port: 32400
+          protocol: TCP
