@@ -13,22 +13,30 @@ gitea:
       #   --from-literal=password='<strong-admin-password>' \
       #   -n forgejo
       existingSecret: forgejo-admin-secret
+    # Credentials (database PASSWD, redis cache/queue/session URLs) are NOT in git:
+    # this repo is public. They come from the manually created secret
+    # 'forgejo-app-config' (one key per app.ini section), merged over the config below:
+    #   kubectl create secret generic forgejo-app-config -n forgejo \
+    #     --from-literal=database='PASSWD=<pg-password>' \
+    #     --from-literal=cache='HOST=redis://:<redis-password>@workout-redis-master.workout.svc.cluster.local:6379/0' \
+    #     --from-literal=queue='CONN_STR=redis://:<redis-password>@workout-redis-master.workout.svc.cluster.local:6379/1' \
+    #     --from-literal=session='PROVIDER_CONFIG=redis://:<redis-password>@workout-redis-master.workout.svc.cluster.local:6379/2'
+    # The passwords must match workout/forgejo-pg-password and workout/redis-secret.
+    additionalConfigSources:
+      - secret:
+          secretName: forgejo-app-config
     config:
       database:
         DB_TYPE: postgres
         HOST: workout-pg-rw.workout.svc.cluster.local:5432
         NAME: forgejo
         USER: forgejo
-        PASSWD: "Rtljpo2NJMqDkOS9AVaG0KmlSLxCNST"
       cache:
         ADAPTER: redis
-        HOST: "redis://:IbdcJemCwrljUddyp5FRJjaf7VWOsH3I@workout-redis-master.workout.svc.cluster.local:6379/0"
       queue:
         TYPE: redis
-        CONN_STR: "redis://:IbdcJemCwrljUddyp5FRJjaf7VWOsH3I@workout-redis-master.workout.svc.cluster.local:6379/1"
       session:
         PROVIDER: redis
-        PROVIDER_CONFIG: "redis://:IbdcJemCwrljUddyp5FRJjaf7VWOsH3I@workout-redis-master.workout.svc.cluster.local:6379/2"
       server:
         DOMAIN: forgejo.barrows.helegoeie.dev
         ROOT_URL: https://forgejo.barrows.helegoeie.dev

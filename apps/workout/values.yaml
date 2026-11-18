@@ -1,5 +1,10 @@
 redis:
   architecture: standalone
+  # Pinned by digest: the floating `latest` meant each node ran whatever version it
+  # had cached, and an older node could not read the RDB/AOF a newer one wrote
+  # ("Can't handle RDB format version 15"), crash-looping Redis after a reschedule.
+  image:
+    digest: sha256:59078af5aec997137eb95f34fed376487b471e05c9a244c2812a13598c434950
   auth:
     enabled: true
     existingSecret: redis-secret
