@@ -8,6 +8,12 @@ gitea:
     digest: sha256:cf5f5ae6acf2ababca0ee3d255705b83a47f35b25e07fc931d694d60664053fe
     rootless: false
 
+  # Recreate, not RollingUpdate: the data PVC is RWO on Longhorn, so a surge pod can
+  # never attach it while the old pod runs and the rollout deadlocks (Multi-Attach).
+  strategy:
+    type: Recreate
+    rollingUpdate: null
+
   gitea:
     # gitea.gitea.admin/config maps to .Values.gitea.admin/config inside the gitea sub-chart.
     admin:
