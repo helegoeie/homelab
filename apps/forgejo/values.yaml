@@ -2,10 +2,11 @@ gitea:
   image:
     registry: ""
     repository: codeberg.org/forgejo/forgejo
-    # Digest goes in its own field: the chart copies `tag` into a label, and
-    # "16@sha256:..." is not a valid label value (>63 chars), which breaks sync.
-    tag: "16"
-    digest: sha256:cf5f5ae6acf2ababca0ee3d255705b83a47f35b25e07fc931d694d60664053fe
+    # Held at 11 (what actually ran). Renovate's jump to 16 never deployed and fails
+    # in this gitea chart's init (`environment-to-ini -apply-env` is gone in 16).
+    # Upgrade 11 -> 16 deliberately, with a DB backup first. Any digest pin goes in
+    # image.digest: the chart copies `tag` into a label, which rejects "x@sha256:...".
+    tag: "11"
     rootless: false
 
   # Recreate, not RollingUpdate: the data PVC is RWO on Longhorn, so a surge pod can
