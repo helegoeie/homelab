@@ -10,3 +10,9 @@ longhorn:
     defaultClassReplicaCount: 1
   preUpgradeChecker:
     jobEnabled: false
+  # Off-site backups to Cloudflare R2. Credentials live in the manually created
+  # secret longhorn-system/r2-backup (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
+  # AWS_ENDPOINTS=https://<account-id>.r2.cloudflarestorage.com); never in git.
+  defaultBackupStore:
+    backupTarget: s3://barrows-backup@auto/longhorn/
+    backupTargetCredentialSecret: r2-backup

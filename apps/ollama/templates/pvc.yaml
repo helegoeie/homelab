@@ -5,6 +5,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "ollama.labels" . | nindent 4 }}
+    # Excluded from the nightly R2 backup (models are re-downloadable).
+    recurring-job-source.longhorn.io: enabled
+    recurring-job-group.longhorn.io/no-backup: enabled
 spec:
   accessModes:
     - ReadWriteOnce

@@ -1,0 +1,18 @@
+# Nightly off-site backup of every Longhorn volume to R2.
+# Group "default" covers every volume WITHOUT its own recurring-job labels;
+# volumes labelled recurring-job-group.longhorn.io/no-backup are skipped
+# (media, downloads, plex-config, ollama). Backups are incremental.
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: nightly-backup
+  namespace: longhorn-system
+spec:
+  task: backup
+  cron: "0 3 * * *"
+  groups:
+    - default
+  retain: 3
+  concurrency: 1
+  labels:
+    schedule: nightly

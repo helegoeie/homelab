@@ -1,7 +1,8 @@
 # IMPORTANT: this Postgres cluster is shared infrastructure — it backs both Forgejo's
 # and Zitadel's databases (databases/roles: apps/workout/templates/postgres-databases.yaml).
 # Despite the "workout" namespace name (a historical leftover), this is NOT disposable.
-# There is no backup target configured for it — deleting this Cluster is unrecoverable.
+# Backed up to Cloudflare R2 by the Barman Cloud plugin: continuous WAL archiving
+# plus a nightly base backup (object-store.yaml, scheduled-backup.yaml).
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -18,6 +19,11 @@ spec:
     initdb:
       database: workout
       owner: workout
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: r2-store
   postgresql:
     pg_hba:
       - host all all 10.244.0.0/16 scram-sha-256
