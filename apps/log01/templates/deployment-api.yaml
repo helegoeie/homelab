@@ -45,6 +45,12 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.api.auth.existingSecret }}
                   key: {{ .Values.api.auth.secretKey }}
+            {{- with .Values.api.auth.cloudflareAccess }}
+            - name: CF_ACCESS_TEAM_DOMAIN
+              value: {{ .teamDomain | quote }}
+            - name: CF_ACCESS_AUD
+              value: {{ .aud | quote }}
+            {{- end }}
           ports:
             - name: api
               containerPort: 4000

@@ -25,6 +25,12 @@ api:
   auth:
     existingSecret: log01-secrets
     secretKey: jwt-secret
+    # Cloudflare Access login (log01 >= v0.3.4): the Access session on
+    # log01.helegoeie.dev becomes the log01 login. Not secrets: the team domain is
+    # the token issuer and the AUD tag is inside every token. Empty disables it.
+    cloudflareAccess:
+      teamDomain: small-darkness-167b.cloudflareaccess.com
+      aud: fb0b7be27194cef252f28211c935dcdcde8369b86215206f25d8a238dd838327
   resources:
     requests:
       cpu: 10m
