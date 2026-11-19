@@ -7,7 +7,7 @@ web:
   image:
     repository: forgejo.barrows.helegoeie.dev/helegoeie/log01
     pullPolicy: Always
-    tag: "v0.3.3"
+    tag: "v0.3.4"
   resources:
     requests:
       cpu: 10m
@@ -20,7 +20,7 @@ api:
   image:
     repository: forgejo.barrows.helegoeie.dev/helegoeie/log01-api
     pullPolicy: Always
-    tag: "v0.3.3"
+    tag: "v0.3.4"
   # JWT signing key — pre-create the secret (see app.yaml note).
   auth:
     existingSecret: log01-secrets
