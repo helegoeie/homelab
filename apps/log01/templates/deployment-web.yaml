@@ -52,6 +52,13 @@ spec:
               port: http
             initialDelaySeconds: 2
             periodSeconds: 5
+          # Keep serving for a few seconds after the pod is marked for deletion, so
+          # ingress-nginx and cloudflared drop it from their endpoints before nginx
+          # stops (without this a rollout shows brief connection refusals).
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sleep", "5"]
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
           # nginx's master starts as root (port 80, workers drop to nginx); keep
