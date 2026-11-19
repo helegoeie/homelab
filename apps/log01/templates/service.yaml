@@ -14,3 +14,23 @@ spec:
       name: http
   selector:
     {{- include "log01.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+---
+# In-namespace only: the web pods proxy /api here.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "log01.fullname" . }}-api
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "log01.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 4000
+      targetPort: api
+      protocol: TCP
+      name: api
+  selector:
+    {{- include "log01.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: api

@@ -1,6 +1,5 @@
 # log01 is internet-facing (Cloudflare Tunnel) and reached on the LAN through
-# ingress-nginx; nothing else may connect. The api sidecar is reached over
-# localhost inside the pod. Egress is left open.
+# ingress-nginx; nothing else may connect. Egress is left open.
 # Kubelet probes come from the node and are always allowed by Cilium.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -21,4 +20,27 @@ spec:
               kubernetes.io/metadata.name: cloudflared
       ports:
         - port: 80
+          protocol: TCP
+---
+# The api runs in its own pod; only log01's web pods may reach it.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-to-api
+  namespace: {{ .Release.Namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "log01.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- include "log01.selectorLabels" . | nindent 14 }}
+              app.kubernetes.io/component: web
+      ports:
+        - port: 4000
           protocol: TCP

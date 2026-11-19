@@ -1,11 +1,13 @@
-# Single-replica by design: the api uses a SQLite file on a RWO Longhorn volume.
-replicaCount: 1
+# web (nginx SPA) and api (node + SQLite on a RWO Longhorn volume) are separate
+# Deployments: web rolls with no downtime, the api is a single Recreate pod.
+
 
 web:
+  replicas: 2
   image:
     repository: forgejo.barrows.helegoeie.dev/helegoeie/log01
     pullPolicy: Always
-    tag: "v0.3.2"
+    tag: "v0.3.3"
   resources:
     requests:
       cpu: 10m
@@ -18,7 +20,7 @@ api:
   image:
     repository: forgejo.barrows.helegoeie.dev/helegoeie/log01-api
     pullPolicy: Always
-    tag: "v0.3.2"
+    tag: "v0.3.3"
   # JWT signing key — pre-create the secret (see app.yaml note).
   auth:
     existingSecret: log01-secrets
