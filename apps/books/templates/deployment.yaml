@@ -85,7 +85,6 @@ spec:
           ports:
             - name: soulseek
               containerPort: {{ .Values.slskd.listenPort }}
-              hostPort: {{ .Values.slskd.listenPort }}
           resources:
             {{- toYaml .Values.slskd.resources | nindent 12 }}
           securityContext:

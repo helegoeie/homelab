@@ -14,9 +14,10 @@ slskd:
   image:
     repository: slskd/slskd
     tag: "0.26.2@sha256:d0963a3e5b16facd295bf4f2156dad0182f246b1b21a032cae12f5494c694843"
-  # Soulseek peer port. Exposed on the node so peers can connect for uploads
-  # and firewalled transfers; forward it on the router for best results.
+  # Soulseek peer port, exposed on its own MetalLB IP (hostPort is refused by
+  # the cluster PodSecurity baseline). Forward TCP 50300 on the router to it.
   listenPort: 50300
+  loadBalancerIP: "192.168.1.244"
   existingSecret: books-secrets
   resources:
     requests: { cpu: 20m, memory: 128Mi }

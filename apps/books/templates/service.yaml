@@ -14,3 +14,23 @@ spec:
       targetPort: http
   selector:
     {{- include "books.labels" . | nindent 4 }}
+---
+# Soulseek peer port only (TCP 50300) on its own LAN IP, for incoming peer
+# connections. slskd's HTTP port 5030 is deliberately not on any Service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: slskd-peer
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "books.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer
+  loadBalancerIP: {{ .Values.slskd.loadBalancerIP | quote }}
+  ports:
+    - name: soulseek
+      port: {{ .Values.slskd.listenPort }}
+      targetPort: soulseek
+      protocol: TCP
+  selector:
+    {{- include "books.labels" . | nindent 4 }}
