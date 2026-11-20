@@ -23,6 +23,20 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
           type: RuntimeDefault
+      initContainers:
+        # slskd insists on a writable /app; create its state dir on the volume
+        # as uid 1000 so the subPath mount below is owned by slskd.
+        - name: slskd-appdir
+          image: "{{ .Values.book01.image.repository }}:{{ .Values.book01.image.tag }}"
+          command: ["mkdir", "-p", "/data/slskd", "/data/books", "/data/downloads", "/data/incomplete"]
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - { name: data, mountPath: /data }
       containers:
         - name: book01
           image: "{{ .Values.book01.image.repository }}:{{ .Values.book01.image.tag }}"
@@ -80,8 +94,6 @@ spec:
               value: /data/incomplete
             - name: SLSKD_SHARED_DIR
               value: /data/books
-            - name: APP_DIR
-              value: /data/slskd
           ports:
             - name: soulseek
               containerPort: {{ .Values.slskd.listenPort }}
@@ -95,6 +107,7 @@ spec:
             capabilities: { drop: ["ALL"] }
           volumeMounts:
             - { name: data, mountPath: /data }
+            - { name: data, mountPath: /app, subPath: slskd }
       volumes:
         - name: tmp
           emptyDir: {}
