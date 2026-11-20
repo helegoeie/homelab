@@ -5,7 +5,7 @@ book01:
   image:
     repository: forgejo.barrows.helegoeie.dev/helegoeie/book01
     pullPolicy: Always
-    tag: "v0.1.0"
+    tag: "v0.1.2"
   resources:
     requests: { cpu: 10m, memory: 48Mi }
     limits: { cpu: 200m, memory: 160Mi }
