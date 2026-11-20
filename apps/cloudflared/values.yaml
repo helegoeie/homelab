@@ -27,6 +27,9 @@ tunnel:
 ingress:
   - hostname: log01.helegoeie.dev
     service: http://log01.log01.svc.cluster.local:80
+  # book01 is behind Cloudflare Access (it has no login of its own).
+  - hostname: book01.helegoeie.dev
+    service: http://book01.books.svc.cluster.local:80
 
 resources:
   requests:

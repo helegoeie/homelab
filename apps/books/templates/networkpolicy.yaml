@@ -1,4 +1,5 @@
-# ingress-nginx may reach book01's HTTP port; anyone may reach the Soulseek
+# ingress-nginx (LAN/Tailscale) and cloudflared (book01.helegoeie.dev, behind
+# Cloudflare Access) may reach book01's HTTP port; anyone may reach the Soulseek
 # peer port. slskd's HTTP port 5030 is admitted from nowhere.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -13,6 +14,9 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: ingress-nginx
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: cloudflared
       ports:
         - port: 3000
           protocol: TCP
