@@ -28,7 +28,7 @@ spec:
         # as uid 1000 so the subPath mount below is owned by slskd.
         - name: slskd-appdir
           image: "{{ .Values.book01.image.repository }}:{{ .Values.book01.image.tag }}"
-          command: ["mkdir", "-p", "/data/slskd", "/data/books", "/data/downloads", "/data/incomplete"]
+          command: ["mkdir", "-p", "/data/slskd", "/data/books", "/data/downloads", "/data/incomplete", "/data/share-none"]
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -92,8 +92,10 @@ spec:
               value: /data/downloads
             - name: SLSKD_INCOMPLETE_DIR
               value: /data/incomplete
+            # Shares nothing: an empty directory only book01 creates (downloading only,
+            # no uploads of /data/books; Floris 2026-11-20).
             - name: SLSKD_SHARED_DIR
-              value: /data/books
+              value: /data/share-none
           ports:
             - name: soulseek
               containerPort: {{ .Values.slskd.listenPort }}
