@@ -1,0 +1,16 @@
+# book01 only. slskd's HTTP port 5030 deliberately has no Service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: book01
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "books.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http
+  selector:
+    {{- include "books.labels" . | nindent 4 }}

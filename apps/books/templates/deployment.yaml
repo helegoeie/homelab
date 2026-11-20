@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book01
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "books.labels" . | nindent 4 }}
+spec:
+  # One pod: the volume is RWO and slskd keeps one Soulseek session.
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "books.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "books.labels" . | nindent 8 }}
+    spec:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: book01
+          image: "{{ .Values.book01.image.repository }}:{{ .Values.book01.image.tag }}"
+          imagePullPolicy: {{ .Values.book01.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: "3000"
+            - name: DATA_DIR
+              value: /data
+            - name: SLSKD_URL
+              value: http://127.0.0.1:5030
+          ports:
+            - name: http
+              containerPort: 3000
+          livenessProbe:
+            httpGet: { path: /api/health, port: http }
+            periodSeconds: 15
+          readinessProbe:
+            httpGet: { path: /api/health, port: http }
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.book01.resources | nindent 12 }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - { name: data, mountPath: /data }
+            - { name: tmp, mountPath: /tmp }
+
+        # Headless Soulseek client. Web auth is off because its HTTP port only
+        # listens inside this pod: no Service or Ingress points at 5030, and the
+        # NetworkPolicy admits only ingress-nginx to book01's port.
+        - name: slskd
+          image: "{{ .Values.slskd.image.repository }}:{{ .Values.slskd.image.tag }}"
+          env:
+            - name: SLSKD_SLSK_USERNAME
+              valueFrom:
+                secretKeyRef: { name: {{ .Values.slskd.existingSecret }}, key: slsk-username }
+            - name: SLSKD_SLSK_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: {{ .Values.slskd.existingSecret }}, key: slsk-password }
+            - name: SLSKD_SLSK_LISTEN_PORT
+              value: {{ .Values.slskd.listenPort | quote }}
+            - name: SLSKD_NO_AUTH
+              value: "true"
+            - name: SLSKD_REMOTE_CONFIGURATION
+              value: "false"
+            - name: SLSKD_DOWNLOADS_DIR
+              value: /data/downloads
+            - name: SLSKD_INCOMPLETE_DIR
+              value: /data/incomplete
+            - name: SLSKD_SHARED_DIR
+              value: /data/books
+            - name: APP_DIR
+              value: /data/slskd
+          ports:
+            - name: soulseek
+              containerPort: {{ .Values.slskd.listenPort }}
+              hostPort: {{ .Values.slskd.listenPort }}
+          resources:
+            {{- toYaml .Values.slskd.resources | nindent 12 }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - { name: data, mountPath: /data }
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: data
+          persistentVolumeClaim:
+            claimName: books-data

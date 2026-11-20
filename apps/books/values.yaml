@@ -1,0 +1,37 @@
+# One pod: book01 (SPA + API) and slskd side by side on one RWO Longhorn volume.
+# book01 talks to slskd on localhost:5030; that port is never exposed.
+
+book01:
+  image:
+    repository: forgejo.barrows.helegoeie.dev/helegoeie/book01
+    pullPolicy: Always
+    tag: "v0.1.0"
+  resources:
+    requests: { cpu: 10m, memory: 48Mi }
+    limits: { cpu: 200m, memory: 160Mi }
+
+slskd:
+  image:
+    repository: slskd/slskd
+    tag: "0.26.2@sha256:d0963a3e5b16facd295bf4f2156dad0182f246b1b21a032cae12f5494c694843"
+  # Soulseek peer port. Exposed on the node so peers can connect for uploads
+  # and firewalled transfers; forward it on the router for best results.
+  listenPort: 50300
+  existingSecret: books-secrets
+  resources:
+    requests: { cpu: 20m, memory: 128Mi }
+    limits: { cpu: 500m, memory: 512Mi }
+
+persistence:
+  storageClass: longhorn
+  size: 20Gi
+
+service:
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  host: book01.barrows.helegoeie.dev
+  tls:
+    secretName: book01-tls

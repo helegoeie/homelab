@@ -15,6 +15,7 @@ Homelab Kubernetes cluster built on Talos Linux, managed with ArgoCD.
 | Bazarr       | https://bazarr.barrows.helegoeie.dev         |
 | qBittorrent  | https://qbittorrent.barrows.helegoeie.dev    |
 | Seerr        | https://seerr.barrows.helegoeie.dev          |
+| book01       | https://book01.barrows.helegoeie.dev         |
 
 Remote access via Tailscale — connect before accessing any service.
 

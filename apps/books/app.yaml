@@ -1,0 +1,6 @@
+# Pre-create the Soulseek login (one-time, out of git):
+#   kubectl create namespace books
+#   kubectl create secret generic books-secrets -n books \
+#     --from-literal=slsk-username='<soulseek user>' \
+#     --from-literal=slsk-password='<soulseek password>'
+namespace: books

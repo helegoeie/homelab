@@ -1,0 +1,6 @@
+apiVersion: v2
+name: books
+description: book01 (scan a book, fetch its epub) with slskd as a same-pod sidecar
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
