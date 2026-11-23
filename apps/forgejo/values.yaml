@@ -6,7 +6,7 @@ gitea:
     # in this gitea chart's init (`environment-to-ini -apply-env` is gone in 16).
     # Upgrade 11 -> 16 deliberately, with a DB backup first. Any digest pin goes in
     # image.digest: the chart copies `tag` into a label, which rejects "x@sha256:...".
-    tag: "11"
+    tag: "11@sha256:946243edbab116d5bb78b73ea68af6f3d69229ba1b1ed958dd82c3481167f3e0"
     rootless: false
 
   # Recreate, not RollingUpdate: the data PVC is RWO on Longhorn, so a surge pod can
