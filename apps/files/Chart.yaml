@@ -1,0 +1,6 @@
+apiVersion: v2
+name: files
+description: dufs file server for sharing downloads (files.helegoeie.dev, behind Cloudflare Access)
+type: application
+version: 0.1.0
+appVersion: "0.47.0"

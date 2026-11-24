@@ -1,0 +1,28 @@
+# dufs serves one Longhorn volume. Guests (the tunnel, behind Cloudflare Access)
+# can browse, search and download, folders as zip; the admin login from the
+# files-auth secret can upload and delete, meant for use over LAN/Tailscale.
+
+image:
+  repository: sigoden/dufs
+  tag: "v0.47.0@sha256:e5152c04e41d5a9d785546278b632bf035c8a08c52d7e8d35f4b59681f5ff35a"
+
+existingSecret: files-auth
+
+persistence:
+  storageClass: longhorn
+  size: 100Gi
+
+resources:
+  requests: { cpu: 10m, memory: 32Mi }
+  limits: { cpu: 500m, memory: 256Mi }
+
+service:
+  port: 80
+
+# LAN/Tailscale only; uploads of many GB go through here.
+ingress:
+  enabled: true
+  className: nginx
+  host: files.barrows.helegoeie.dev
+  tls:
+    secretName: files-tls

@@ -1,0 +1,6 @@
+# Pre-create the admin login (one-time, out of git). Admin may upload and delete;
+# everyone else gets read-only. The password is stored as a SHA-512 crypt hash:
+#   kubectl create namespace files
+#   kubectl create secret generic files-auth -n files \
+#     --from-literal=DUFS_AUTH="admin:$(openssl passwd -6 '<password>')@/:rw|@/"
+namespace: files
