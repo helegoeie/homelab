@@ -1,4 +1,5 @@
-# Only ingress-nginx talks to vid01 (web on 80; the api sidecar is reached over
+# ingress-nginx (LAN/Tailscale) and cloudflared (vid01.helegoeie.dev, behind
+# Cloudflare Access) talk to vid01 (web on 80; the api sidecar is reached over
 # localhost inside the pod). Egress is left open (YouTube RSS, Ollama).
 # Kubelet probes come from the node and are always allowed by Cilium.
 apiVersion: networking.k8s.io/v1
@@ -15,6 +16,9 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: ingress-nginx
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: cloudflared
       ports:
         - port: 80
           protocol: TCP

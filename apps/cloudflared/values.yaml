@@ -33,6 +33,9 @@ ingress:
   # files is behind Cloudflare Access (guests are read-only in dufs itself).
   - hostname: files.helegoeie.dev
     service: http://files.files.svc.cluster.local:80
+  # vid01 is behind Cloudflare Access (it has no login of its own).
+  - hostname: vid01.helegoeie.dev
+    service: http://vid01.vid01.svc.cluster.local:80
 
 resources:
   requests:
