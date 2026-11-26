@@ -36,6 +36,9 @@ ingress:
   # vid01 is behind Cloudflare Access (it has no login of its own).
   - hostname: vid01.helegoeie.dev
     service: http://vid01.vid01.svc.cluster.local:80
+  # alb01 is behind Cloudflare Access (the Access JWT is its login).
+  - hostname: alb01.helegoeie.dev
+    service: http://alb01.albums.svc.cluster.local:80
 
 resources:
   requests:

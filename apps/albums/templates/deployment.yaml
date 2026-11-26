@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alb01
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "albums.labels" . | nindent 4 }}
+spec:
+  # One writer: SQLite on a RWO volume.
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "albums.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "albums.labels" . | nindent 8 }}
+    spec:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: alb01
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: "3000"
+            - name: DATA_DIR
+              value: /data
+            - name: NODE_ENV
+              value: production
+            - name: TZ
+              value: Europe/Amsterdam
+            - name: CF_ACCESS_TEAM_DOMAIN
+              value: {{ .Values.cloudflareAccess.teamDomain | quote }}
+            - name: CF_ACCESS_AUD
+              value: {{ .Values.cloudflareAccess.aud | quote }}
+            - name: ADMIN_EMAILS
+              valueFrom:
+                secretKeyRef: { name: {{ .Values.spotify.existingSecret }}, key: admin-emails, optional: true }
+            - name: SPOTIFY_CLIENT_ID
+              valueFrom:
+                secretKeyRef: { name: {{ .Values.spotify.existingSecret }}, key: spotify-client-id }
+            - name: SPOTIFY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef: { name: {{ .Values.spotify.existingSecret }}, key: spotify-client-secret }
+          ports:
+            - name: http
+              containerPort: 3000
+          livenessProbe:
+            httpGet: { path: /api/health, port: http }
+            periodSeconds: 15
+          readinessProbe:
+            httpGet: { path: /api/health, port: http }
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - { name: data, mountPath: /data }
+            - { name: tmp, mountPath: /tmp }
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: data
+          persistentVolumeClaim:
+            claimName: albums-data

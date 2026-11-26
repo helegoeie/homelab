@@ -1,0 +1,33 @@
+# One pod: bun serves the SPA and /api, SQLite on a small RWO Longhorn volume.
+# Only reachable through the cloudflared tunnel (alb01.helegoeie.dev) behind
+# Cloudflare Access: the Access JWT is the login, so there is no LAN ingress.
+
+image:
+  repository: forgejo.barrows.helegoeie.dev/helegoeie/alb01
+  pullPolicy: Always
+  tag: "v0.1.0"
+
+# Spotify client credentials (see app.yaml note).
+spotify:
+  existingSecret: albums-secrets
+
+# Cloudflare Access: not secrets. The team domain is the token issuer and the
+# AUD tag is inside every token (Access app "alb01"). Empty means every /api
+# call answers 401.
+cloudflareAccess:
+  teamDomain: small-darkness-167b.cloudflareaccess.com
+  aud: "3d385aad7791310eccf40f6eb76e7e0a43139b1618af12ad01d4cb54d090f2e9"
+
+# Admins (quota, reroll) come from the optional "admin-emails" key in the same
+# secret, comma-separated, so no email address lands in this public repo.
+
+resources:
+  requests: { cpu: 10m, memory: 48Mi }
+  limits: { cpu: 200m, memory: 192Mi }
+
+persistence:
+  storageClass: longhorn
+  size: 1Gi
+
+service:
+  port: 80

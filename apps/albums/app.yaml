@@ -1,0 +1,7 @@
+# Pre-create the Spotify credentials (one-time, out of git):
+#   kubectl create namespace albums
+#   kubectl create secret generic albums-secrets -n albums \
+#     --from-literal=spotify-client-id='<client id>' \
+#     --from-literal=spotify-client-secret='<client secret>' \
+#     --from-literal=admin-emails='<admin email>[,<admin email>]'
+namespace: albums
