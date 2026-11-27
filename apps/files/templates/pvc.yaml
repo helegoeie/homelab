@@ -5,6 +5,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "files.labels" . | nindent 4 }}
+    # Excluded from the nightly R2 backup (too big).
+    recurring-job-source.longhorn.io: enabled
+    recurring-job-group.longhorn.io/no-backup: enabled
 spec:
   accessModes: ["ReadWriteOnce"]
   storageClassName: {{ .Values.persistence.storageClass }}
