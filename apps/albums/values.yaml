@@ -5,7 +5,7 @@
 image:
   repository: forgejo.barrows.helegoeie.dev/helegoeie/alb01
   pullPolicy: Always
-  tag: "v0.7.0"
+  tag: "v0.7.1"
 
 # Spotify client credentials (see app.yaml note).
 spotify:
