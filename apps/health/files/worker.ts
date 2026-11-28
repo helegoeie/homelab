@@ -41,7 +41,10 @@ export function toEnvelope(flat: Record<string, unknown>, now: string) {
   const date = typeof flat.exported_at === 'string' && !Number.isNaN(Date.parse(flat.exported_at)) ? flat.exported_at : now
   const metrics: { name: string; data: Record<string, unknown>[] }[] = []
   for (const [key, name] of Object.entries(METRICS)) {
-    let qty = toNumber(flat[key])
+    // whole-number metrics: a Dutch "8.421" is eight thousand, not eight
+    const raw = flat[key]
+    const grouped = (key === 'steps' || key === 'active_energy_kcal') && typeof raw === 'string' && /^\d{1,3}(\.\d{3})+$/.test(raw.trim())
+    let qty = toNumber(grouped ? (raw as string).replace(/\./g, '') : raw)
     if (qty === null) continue
     if (key === 'body_fat_pct' && qty <= 1) qty = Math.round(qty * 1000) / 10
     metrics.push({ name, data: [{ date, qty }] })
