@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: { name: read01-data }
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.persistence.storageClass }}
+  resources: { requests: { storage: {{ .Values.persistence.size }} } }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: read01 }
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector: { matchLabels: { app.kubernetes.io/name: read01 } }
+  template:
+    metadata: { labels: { app.kubernetes.io/name: read01 } }
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: read01
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - { name: NODE_ENV, value: production }
+            - { name: TZ, value: Europe/Amsterdam }
+            - { name: CF_ACCESS_TEAM_DOMAIN, value: {{ .Values.cloudflareAccess.teamDomain | quote }} }
+            - { name: CF_ACCESS_AUD, value: {{ .Values.cloudflareAccess.aud | quote }} }
+            - { name: CLAUDE_MODEL, value: {{ .Values.claude.model | quote }} }
+            - { name: MAX_PER_DAY, value: {{ .Values.maxBooksPerDay | quote }} }
+            - name: ALLOWED_EMAILS
+              valueFrom: { secretKeyRef: { name: {{ .Values.claude.existingSecret }}, key: allowed-emails } }
+            - name: CLAUDE_CODE_OAUTH_TOKEN
+              valueFrom: { secretKeyRef: { name: {{ .Values.claude.existingSecret }}, key: claude-oauth-token } }
+          ports: [{ name: http, containerPort: 3000 }]
+          livenessProbe: { httpGet: { path: /health, port: http }, periodSeconds: 30 }
+          readinessProbe: { httpGet: { path: /health, port: http }, periodSeconds: 10 }
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - { name: data, mountPath: /data }
+            - { name: tmp, mountPath: /tmp }
+      volumes:
+        - { name: tmp, emptyDir: {} }
+        - { name: data, persistentVolumeClaim: { claimName: read01-data } }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: read01 }
+spec:
+  selector: { app.kubernetes.io/name: read01 }
+  ports: [{ name: http, port: 80, targetPort: http }]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: { name: allow-cloudflared }
+spec:
+  podSelector: {}
+  policyTypes: ["Ingress"]
+  ingress:
+    - from: [{ namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: cloudflared } } }]
+      ports: [{ port: 3000, protocol: TCP }]

@@ -1,0 +1,5 @@
+# Pre-create the Claude subscription token (one-time, out of git). Get it with `claude setup-token`:
+#   kubectl create namespace read01
+#   kubectl create secret generic read01-secrets -n read01 --from-literal=claude-oauth-token='<token>' \
+#     --from-literal=allowed-emails='<your Access email>'
+namespace: read01

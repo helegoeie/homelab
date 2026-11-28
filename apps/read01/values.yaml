@@ -1,0 +1,20 @@
+# One pod, SQLite and books on a RWO Longhorn volume. Only reachable through the
+# cloudflared tunnel (read01.helegoeie.dev) behind Cloudflare Access.
+image:
+  repository: forgejo.barrows.helegoeie.dev/helegoeie/read01
+  pullPolicy: Always
+  tag: "d04940f"
+claude:
+  existingSecret: read01-secrets
+  model: sonnet
+# Not secrets. Fill in the AUD tag of the Access app "read01"; empty means 401 everywhere.
+cloudflareAccess:
+  teamDomain: small-darkness-167b.cloudflareaccess.com
+  aud: "f4772fa01f71723a89a95211709fb342d706a0fdce40a6775c2e22f101a7f19e"
+maxBooksPerDay: 5
+resources:
+  requests: { cpu: 20m, memory: 128Mi }
+  limits: { cpu: "1", memory: 1Gi }
+persistence:
+  storageClass: longhorn
+  size: 2Gi
