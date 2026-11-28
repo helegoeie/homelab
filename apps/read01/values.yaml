@@ -3,7 +3,7 @@
 image:
   repository: forgejo.barrows.helegoeie.dev/helegoeie/read01
   pullPolicy: Always
-  tag: "v0.2.0"
+  tag: "v0.2.1"
 claude:
   existingSecret: read01-secrets
   model: sonnet
