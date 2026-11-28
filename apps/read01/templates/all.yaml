@@ -31,7 +31,6 @@ spec:
             - { name: CF_ACCESS_TEAM_DOMAIN, value: {{ .Values.cloudflareAccess.teamDomain | quote }} }
             - { name: CF_ACCESS_AUD, value: {{ .Values.cloudflareAccess.aud | quote }} }
             - { name: CLAUDE_MODEL, value: {{ .Values.claude.model | quote }} }
-            - { name: MAX_PER_DAY, value: {{ .Values.maxBooksPerDay | quote }} }
             - name: ALLOWED_EMAILS
               valueFrom: { secretKeyRef: { name: {{ .Values.claude.existingSecret }}, key: allowed-emails } }
             - name: CLAUDE_CODE_OAUTH_TOKEN

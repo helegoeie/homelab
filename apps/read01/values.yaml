@@ -3,7 +3,7 @@
 image:
   repository: forgejo.barrows.helegoeie.dev/helegoeie/read01
   pullPolicy: Always
-  tag: "v0.1.2"
+  tag: "v0.2.0"
 claude:
   existingSecret: read01-secrets
   model: sonnet
@@ -11,7 +11,6 @@ claude:
 cloudflareAccess:
   teamDomain: small-darkness-167b.cloudflareaccess.com
   aud: "f4772fa01f71723a89a95211709fb342d706a0fdce40a6775c2e22f101a7f19e"
-maxBooksPerDay: 5
 resources:
   requests: { cpu: 20m, memory: 128Mi }
   limits: { cpu: "1", memory: 1Gi }
