@@ -1,0 +1,11 @@
+# One small pod on a stock Bun image; the code in files/ is mounted from a ConfigMap.
+# Reachable only through the cloudflared tunnel; the app itself checks bearer tokens
+# (a phone Shortcut cannot sign in through Cloudflare Access).
+image: oven/bun:1.4.4-slim
+existingSecret: health-secrets
+persistence:
+  storageClass: longhorn
+  size: 128Mi
+resources:
+  requests: { cpu: 5m, memory: 32Mi }
+  limits: { cpu: 200m, memory: 128Mi }

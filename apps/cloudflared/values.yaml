@@ -42,6 +42,9 @@ ingress:
   # read01 is behind Cloudflare Access (the Access JWT is its login).
   - hostname: read01.helegoeie.dev
     service: http://read01.read01.svc.cluster.local:80
+  # health takes bearer tokens in the app itself (a phone Shortcut cannot do Access login).
+  - hostname: health.helegoeie.dev
+    service: http://health.health.svc.cluster.local:80
 
 resources:
   requests:

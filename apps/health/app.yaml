@@ -1,0 +1,5 @@
+# Pre-create the two tokens (one-time, out of git):
+#   kubectl create namespace health
+#   kubectl create secret generic health-secrets -n health \
+#     --from-literal=ingest-token=<random> --from-literal=drain-token=<random>
+namespace: health

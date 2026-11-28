@@ -1,0 +1,6 @@
+apiVersion: v2
+name: health
+description: token-protected buffer for a phone Shortcut
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
